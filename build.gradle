@@ -21,16 +21,27 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven {
+		url = uri("https://af.slicequeue.app/artifactory/gradle-dev")
+		credentials {
+			username = findProperty("ARTIFACTORY_USER") as String
+			password = findProperty("ARTIFACTORY_PASSWORD") as String
+		}
+	}
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	implementation 'app.slicequeue:sq-common-base-time-entity:0.0.1'
+	implementation 'app.slicequeue:sq-common-snowflake:0.0.1'
 }
 
 tasks.named('test') {
