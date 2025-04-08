@@ -1,7 +1,6 @@
 package app.slicequeue.sq_board.board.command.domain;
 
 import app.slicequeue.sq_board.board.command.domain.dto.CreateBoardCommand;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
