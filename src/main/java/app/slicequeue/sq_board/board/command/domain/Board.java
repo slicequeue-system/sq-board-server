@@ -1,7 +1,7 @@
 package app.slicequeue.sq_board.board.command.domain;
 
 import app.slicequeue.common.base.time_entity.BaseTimeSoftDeleteEntity;
-import app.slicequeue.sq_board.board.command.dto.CreateBoardRequest;
+import app.slicequeue.sq_board.board.command.domain.dto.CreateBoardRequest;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;

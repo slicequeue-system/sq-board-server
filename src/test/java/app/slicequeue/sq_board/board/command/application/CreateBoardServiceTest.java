@@ -2,7 +2,7 @@ package app.slicequeue.sq_board.board.command.application;
 
 import app.slicequeue.sq_board.board.command.domain.Board;
 import app.slicequeue.sq_board.board.command.domain.BoardRepository;
-import app.slicequeue.sq_board.board.command.dto.CreateBoardRequest;
+import app.slicequeue.sq_board.board.command.domain.dto.CreateBoardRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
