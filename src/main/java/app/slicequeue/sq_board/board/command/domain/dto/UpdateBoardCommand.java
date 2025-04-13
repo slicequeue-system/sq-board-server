@@ -9,7 +9,7 @@ public record UpdateBoardCommand(BoardId boardId, String name, Long adminId, Str
         return new UpdateBoardCommand(
                 BoardId.from(boardId),
                 request.getName(),
-                request.getProjectId(),
+                request.getAdminId(),
                 request.getDescription());
     }
 }
