@@ -8,11 +8,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.springframework.util.Assert;
 
 import java.util.Objects;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
 public class BoardId {
 
@@ -21,12 +22,22 @@ public class BoardId {
     @Column(name = "board_id")
     private Long id;
 
+    private BoardId(long id) {
+        this.id = id;
+    }
 
     public static BoardId generateId() {
         BoardId boardId = new BoardId();
         Snowflake snowflake = new Snowflake();
         boardId.id = snowflake.nextId();
         return boardId;
+    }
+
+    public static BoardId from(Long idValue) {
+        Assert.notNull(idValue, "id must not be null");
+        if (idValue <= 0)
+            throw new IllegalArgumentException("id must be positive value");
+        return new BoardId(idValue);
     }
 
     @Override
