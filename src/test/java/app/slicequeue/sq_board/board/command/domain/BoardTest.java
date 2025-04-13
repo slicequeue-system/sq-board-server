@@ -1,6 +1,7 @@
 package app.slicequeue.sq_board.board.command.domain;
 
 import app.slicequeue.sq_board.board.command.domain.dto.CreateBoardCommand;
+import app.slicequeue.sq_board.board.command.domain.dto.UpdateBoardCommand;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -54,6 +55,27 @@ class BoardTest {
                 Arguments.of(new CreateBoardCommand("게시판명", null, 1L, "설명"), "projectId must not be null"),
                 Arguments.of(new CreateBoardCommand("게시판명", 1L, null, "설명"), "adminId must not be null")
         );
+    }
+
+    @Test
+    void 수정커멘드로_게시판엔티티_수정을_한다() {
+        // given
+        Board board = Board.create("게시판1", 1L, 1L, "게시판 설명");
+        UpdateBoardCommand command = new UpdateBoardCommand(board.getBoardId(), "게시판1이름수정", 100L, null);
+
+        BoardId expectedBoardId = board.getBoardId();
+        Long expectedProjectId = board.getProjectId();
+
+        // when
+        board.update(command);
+
+        // then
+        assertThat(board.getName()).isEqualTo(command.name());
+        assertThat(board.getAdminId()).isEqualTo(command.adminId());
+        assertThat(board.getDescription()).isEqualTo(command.description()).isNull();
+
+        assertThat(board.getBoardId()).isEqualTo(expectedBoardId);      // 기존 값 유지 확인
+        assertThat(board.getProjectId()).isEqualTo(expectedProjectId);  // 기존 값 유지 확인
     }
 
 }
