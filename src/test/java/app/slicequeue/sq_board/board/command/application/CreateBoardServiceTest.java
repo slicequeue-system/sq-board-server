@@ -6,7 +6,10 @@ import app.slicequeue.sq_board.board.command.domain.BoardRepository;
 import app.slicequeue.sq_board.board.command.domain.dto.CreateBoardCommand;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,23 +30,23 @@ class CreateBoardServiceTest {
     ArgumentCaptor<Board> boardArgumentCaptor;
 
     @Test
-    void 유효한_요청으로_게시판_생성시_정상적으로_저장된다() { // TODO 테스트 픽스쳐 가져가 보기로! - 수정과 더불어 좋은 예시 참고하여!
+    void 유효한_생성커멘드로_게시판_생성시_정상적으로_저장된다() { // TODO 테스트 픽스쳐 가져가 보기로! - 수정과 더불어 좋은 예시 참고하여!
         // given
-        CreateBoardCommand request = new CreateBoardCommand("게시판1", 1L, 1L, "설명");
+        CreateBoardCommand command = new CreateBoardCommand("게시판1", 1L, 1L, "설명");
         given(boardRepository.save(any())).willReturn(mock(Board.class));
 
         // when
-        createBoardService.createBoard(request);
+        createBoardService.createBoard(command);
 
         // then
         verify(boardRepository, times(1)).save(boardArgumentCaptor.capture());
         Board value = boardArgumentCaptor.getValue();
         assertThat(value).isNotNull();
         assertThat(value.getBoardId()).isNotNull();
-        assertThat(value.getName()).isEqualTo(request.name());
-        assertThat(value.getProjectId()).isEqualTo(request.projectId());
-        assertThat(value.getAdminId()).isEqualTo(request.adminId());
-        assertThat(value.getDescription()).isEqualTo(request.description());
+        assertThat(value.getName()).isEqualTo(command.name());
+        assertThat(value.getProjectId()).isEqualTo(command.projectId());
+        assertThat(value.getAdminId()).isEqualTo(command.adminId());
+        assertThat(value.getDescription()).isEqualTo(command.description());
     }
 
     @Test

@@ -6,6 +6,11 @@ import app.slicequeue.sq_board.board.command.domain.BoardRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface JpaBoardRepository extends BoardRepository, JpaRepository<Board, BoardId> {
+
+    @Override
+    Optional<Board> findByBoardId(BoardId id);
 }
