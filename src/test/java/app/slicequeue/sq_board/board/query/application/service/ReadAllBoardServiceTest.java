@@ -1,6 +1,7 @@
 package app.slicequeue.sq_board.board.query.application.service;
 
 import app.slicequeue.sq_board.board.BoardTestFixture;
+import app.slicequeue.sq_board.board.query.application.dto.ReadAllByInfiniteScrollQuery;
 import app.slicequeue.sq_board.board.query.application.dto.ReadAllByPageQuery;
 import app.slicequeue.sq_board.board.query.infra.JpaBoardPagingQueryRepository;
 import app.slicequeue.sq_board.board.query.presentation.dto.BoardListItem;
@@ -58,12 +59,54 @@ class ReadAllBoardServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-
     public static Stream<Arguments> invalidReadAllByPageQueries() {
         return Stream.of(
                 Arguments.of((Object) null),
                 Arguments.of(new ReadAllByPageQuery(null, PageRequest.of(1, 10))),
                 Arguments.of(new ReadAllByPageQuery(1L, null))
+        );
+    }
+
+    void 마지막위치가_없는_무한스크롤_조회쿼리를_통해_첫위치_게시글을_복수조회한다() {
+        // given
+        ReadAllByInfiniteScrollQuery query = ReadAllByInfiniteScrollQuery.of(1L, 10L, null);
+
+        // when
+        readAllBoardService.readAllInfiniteScroll(query);
+
+        // then
+        verify(boardPagingQueryRepository, times(1))
+                .findAllBoardListItemsInfiniteScroll(query.projectId(), query.pageSize());
+    }
+
+    void 마지막위치가_있는_무한스크롤_조회쿼리를_통해_첫위치_게시글을_복수조회한다() {
+        // given
+        ReadAllByInfiniteScrollQuery query = ReadAllByInfiniteScrollQuery.of(1L, 10L, 123L);
+
+        // when
+        readAllBoardService.readAllInfiniteScroll(query);
+
+        // then
+        verify(boardPagingQueryRepository, times(1))
+                .findAllBoardListItemsInfiniteScroll(query.projectId(), query.pageSize(), query.lastBoardId());
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidReadAllByInfiniteScrollQueries")
+    void 비정상_무한스크롤_조회쿼리를_통해_예외가발생한다(ReadAllByInfiniteScrollQuery query) {
+        // given
+
+        // when & then
+        assertThatThrownBy(() -> readAllBoardService.readAllInfiniteScroll(query))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    public static Stream<Arguments> invalidReadAllByInfiniteScrollQueries() {
+        return Stream.of(
+                Arguments.of((Object) null),
+                Arguments.of(ReadAllByInfiniteScrollQuery.of(null, null, null)),
+                Arguments.of(ReadAllByInfiniteScrollQuery.of(1L, null, null)),
+                Arguments.of(ReadAllByInfiniteScrollQuery.of(null, 10L, null))
         );
     }
 }
