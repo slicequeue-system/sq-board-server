@@ -1,9 +1,12 @@
 package app.slicequeue.sq_board.board.query.presentation;
 
+import app.slicequeue.sq_board.board.query.application.dto.ReadAllByInfiniteScrollQuery;
 import app.slicequeue.sq_board.board.query.application.dto.ReadAllByPageQuery;
 import app.slicequeue.sq_board.board.query.application.service.ReadAllBoardService;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -25,6 +28,7 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@TestMethodOrder(MethodOrderer.MethodName.class)
 @WebMvcTest(BoardQueryController.class)
 class BoardQueryControllerTest {
 
@@ -33,6 +37,8 @@ class BoardQueryControllerTest {
 
     @Captor
     private ArgumentCaptor<ReadAllByPageQuery> pageQueryArgumentCaptor;
+    @Captor
+    private ArgumentCaptor<ReadAllByInfiniteScrollQuery> infiniteScrollQueryArgumentCaptor;
 
     @Autowired
     private MockMvc mockMvc;
@@ -118,5 +124,68 @@ class BoardQueryControllerTest {
                 Arguments.of(1L, 1, null),
                 Arguments.of(1L, null, 1), */
         );
+    }
+
+    @Test
+    void 게시판무한스크롤조회API는_정상요청이_들어올_경우_요청객체를_쿼리객체로_전환하여_프로젝트에해당하는_게시판목록_조회를_한다() throws Exception {
+        // given
+        String targetUrl = "/v1/boards/infinite-scroll";
+        long projectId = 1L;
+        long pageSize = 5;
+        long lastBoardId = 123;
+
+        // when
+        mockMvc.perform(
+                MockMvcRequestBuilders.get(targetUrl)
+                        .queryParam("projectId", String.valueOf(projectId))
+                        .queryParam("size", String.valueOf(pageSize))
+                        .queryParam("lastBoardId", String.valueOf(lastBoardId))
+        );
+
+        // then
+        verify(readAllBoardService, times(1)).readAllInfiniteScroll(infiniteScrollQueryArgumentCaptor.capture());
+        ReadAllByInfiniteScrollQuery value = infiniteScrollQueryArgumentCaptor.getValue();
+        assertThat(value).isNotNull();
+        assertThat(value.projectId()).isEqualTo(projectId);
+        assertThat(value.pageSize()).isEqualTo(pageSize);
+        assertThat(value.lastBoardId()).isEqualTo(lastBoardId);
+    }
+
+    @Test
+    void 게시판무한스크롤조회API는_페이지사이즈가_없는_요청이_들어올_경우_요청객체를_쿼리객체에_기본값10으로_전환하여_프로젝트에해당하는_게시판목록_조회를_한다() throws Exception {
+        // given
+        String targetUrl = "/v1/boards/infinite-scroll";
+        long projectId = 1L;
+        long expectedPageSize = 10;
+
+        // when
+        mockMvc.perform(
+                MockMvcRequestBuilders.get(targetUrl)
+                        .queryParam("projectId", String.valueOf(projectId))
+        );
+
+        // then
+        verify(readAllBoardService, times(1)).readAllInfiniteScroll(infiniteScrollQueryArgumentCaptor.capture());
+        ReadAllByInfiniteScrollQuery value = infiniteScrollQueryArgumentCaptor.getValue();
+        assertThat(value).isNotNull();
+        assertThat(value.projectId()).isEqualTo(projectId);
+        assertThat(value.pageSize()).isEqualTo(expectedPageSize);
+        assertThat(value.lastBoardId()).isNull();
+    }
+
+    @Test
+    void 게시판무한스크롤조회API는_필수값이_없는_비정상_요청이_들어올_경우_400예외응답을한다() throws Exception {
+        // given
+        String targetUrl = "/v1/boards/infinite-scroll";
+
+        // when
+        ResultActions result = mockMvc.perform(
+                MockMvcRequestBuilders.get(targetUrl)
+        );
+
+        // then
+        verify(readAllBoardService, times(0)).readAllInfiniteScroll(any());
+        result.andDo(print())
+                .andExpect(status().isBadRequest());
     }
 }
