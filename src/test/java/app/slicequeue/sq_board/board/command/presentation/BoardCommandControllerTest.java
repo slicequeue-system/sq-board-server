@@ -1,6 +1,6 @@
 package app.slicequeue.sq_board.board.command.presentation;
 
-import app.slicequeue.sq_board.board.command.application.BoardFixture;
+import app.slicequeue.sq_board.board.BoardTestFixture;
 import app.slicequeue.sq_board.board.command.application.CreateBoardService;
 import app.slicequeue.sq_board.board.command.application.UpdateBoardService;
 import app.slicequeue.sq_board.board.command.domain.Board;
@@ -9,7 +9,6 @@ import app.slicequeue.sq_board.board.command.domain.dto.UpdateBoardCommand;
 import app.slicequeue.sq_board.board.command.presentation.dto.CreateBoardRequest;
 import app.slicequeue.sq_board.board.command.presentation.dto.UpdateBoardRequest;
 import app.slicequeue.sq_board.common.util.DataSerializer;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -50,7 +49,7 @@ class BoardCommandControllerTest {
     void 정상생성_API_요청이_들어올_경우_요청객체를_커맨드객체로_전환하여_게시판_생성을_한다() throws Exception {
         // given
         String targetUrl = "/v1/boards";
-        Board boardExample1 = BoardFixture.createBoardExample1();
+        Board boardExample1 = BoardTestFixture.createBoardExample1();
         CreateBoardRequest request = new CreateBoardRequest("게시판1 내용", 1L, 1L, "게시판1 설명 수정");
 
         given(createBoardService.createBoard(any())).willReturn(boardExample1.getBoardId());
@@ -81,7 +80,7 @@ class BoardCommandControllerTest {
     void 정상수정_API_요청이_들어올_경우_요청객체를_커맨드객체로_전환하여_게시판_수정을_한다() throws Exception {
         // given
         String targetUrl = "/v1/boards/{boardId}";
-        Board boardExample1 = BoardFixture.createBoardExample1();
+        Board boardExample1 = BoardTestFixture.createBoardExample1();
         UpdateBoardRequest request = new UpdateBoardRequest("게시판1 내용 수정", null, 1L, "게시판1 설명 수정");
 
         given(updateBoardService.updateBoard(any())).willReturn(boardExample1.getBoardId());
