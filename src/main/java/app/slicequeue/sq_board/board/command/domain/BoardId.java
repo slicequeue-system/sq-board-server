@@ -17,6 +17,8 @@ import java.util.Objects;
 @Embeddable
 public class BoardId {
 
+    static Snowflake snowflake = new Snowflake();
+
     @NotNull
     @Comment("게시판식별값")
     @Column(name = "board_id")
@@ -28,7 +30,6 @@ public class BoardId {
 
     public static BoardId generateId() {
         BoardId boardId = new BoardId();
-        Snowflake snowflake = new Snowflake();
         boardId.id = snowflake.nextId();
         return boardId;
     }
