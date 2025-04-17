@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReadAllBoardService {
 
-    JpaBoardPagingQueryRepository boardPagingQueryRepository;
+    private final JpaBoardPagingQueryRepository boardPagingQueryRepository;
 
     public Page<BoardListItem> readAll(ReadAllByPageQuery query) {
         validateReadAllParam(query);

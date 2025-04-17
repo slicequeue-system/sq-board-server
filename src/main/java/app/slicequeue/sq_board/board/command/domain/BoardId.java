@@ -55,8 +55,6 @@ public class BoardId {
 
     @Override
     public String toString() {
-        return "BoardId{" +
-                "id=" + id +
-                '}';
+        return String.valueOf(id);
     }
 }

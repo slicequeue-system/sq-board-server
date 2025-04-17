@@ -81,7 +81,7 @@ class ReadAllBoardServiceTest {
 
     void 마지막위치가_있는_무한스크롤_조회쿼리를_통해_첫위치_게시글을_복수조회한다() {
         // given
-        ReadAllByInfiniteScrollQuery query = ReadAllByInfiniteScrollQuery.of(1L, 10L, 123L);
+        ReadAllByInfiniteScrollQuery query = ReadAllByInfiniteScrollQuery.of(1L, 10L, "123");
 
         // when
         readAllBoardService.readAllInfiniteScroll(query);

@@ -20,16 +20,16 @@ public class BoardCommandController {
     private final UpdateBoardService updateBoardService;
 
     @PostMapping
-    public CommonResponse<Long> create(@RequestBody @Valid CreateBoardRequest request) {
+    public CommonResponse<String> create(@RequestBody @Valid CreateBoardRequest request) {
         CreateBoardCommand command = CreateBoardCommand.from(request);
-        return CommonResponse.success(createBoardService.createBoard(command).getId());
+        return CommonResponse.success("created.", createBoardService.createBoard(command).toString());
     }
 
     @PutMapping("/{boardId}")
-    public CommonResponse<Long> update(@PathVariable("boardId") Long boardId,
+    public CommonResponse<String> update(@PathVariable("boardId") Long boardId,
                                        @RequestBody @Valid UpdateBoardRequest request) {
         UpdateBoardCommand command = UpdateBoardCommand.of(boardId, request);
-        return CommonResponse.success(updateBoardService.updateBoard(command).getId());
+        return CommonResponse.success("updated.", updateBoardService.updateBoard(command).toString());
     }
 
 }
