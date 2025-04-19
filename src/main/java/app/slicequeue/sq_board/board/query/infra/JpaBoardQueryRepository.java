@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface JpaBoardPagingQueryRepository extends JpaRepository<Board, BoardId> {
+public interface JpaBoardQueryRepository extends JpaRepository<Board, BoardId> {
 
 
     @Query("""

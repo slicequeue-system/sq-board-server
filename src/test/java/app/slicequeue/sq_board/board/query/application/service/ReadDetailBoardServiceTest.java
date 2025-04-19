@@ -3,9 +3,8 @@ package app.slicequeue.sq_board.board.query.application.service;
 import app.slicequeue.common.exception.NotFoundException;
 import app.slicequeue.sq_board.board.command.domain.BoardId;
 import app.slicequeue.sq_board.board.query.application.dto.ReadDetailQuery;
-import app.slicequeue.sq_board.board.query.infra.JpaBoardPagingQueryRepository;
+import app.slicequeue.sq_board.board.query.infra.JpaBoardQueryRepository;
 import app.slicequeue.sq_board.board.query.presentation.dto.BoardDetail;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.MethodOrderer.MethodName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -34,7 +33,7 @@ class ReadDetailBoardServiceTest {
     ReadDetailBoardService readDetailBoardService;
 
     @Mock
-    JpaBoardPagingQueryRepository boardPagingQueryRepository;
+    JpaBoardQueryRepository boardPagingQueryRepository;
 
 
     @Test

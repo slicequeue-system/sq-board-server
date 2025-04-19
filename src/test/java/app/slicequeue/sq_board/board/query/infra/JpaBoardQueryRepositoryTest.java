@@ -26,25 +26,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @DataJpaTest
-class JpaBoardPagingQueryRepositoryTest {
+class JpaBoardQueryRepositoryTest {
 
     Long mockProjectId = 1L;
     Long mockAdminId = 1L;
 
     @Autowired
-    JpaBoardPagingQueryRepository jpaBoardPagingQueryRepository;
+    JpaBoardQueryRepository jpaBoardQueryRepository;
 
     @BeforeEach
     void init() {
         List<Board> boardList = BoardTestFixture.createBoardExamples(10, mockProjectId, mockAdminId);
         for (Board board : boardList) {
-            jpaBoardPagingQueryRepository.saveAndFlush(board);
+            jpaBoardQueryRepository.saveAndFlush(board);
         }
     }
 
     @AfterEach
     void clear() {
-        jpaBoardPagingQueryRepository.deleteAll();
+        jpaBoardQueryRepository.deleteAll();
     }
 
     @ParameterizedTest
@@ -55,7 +55,7 @@ class JpaBoardPagingQueryRepositoryTest {
         Long projectId = mockProjectId;
 
         // when
-        Page<BoardListItem> results = jpaBoardPagingQueryRepository.findAllBoardListItemsByProjectId(projectId, page);
+        Page<BoardListItem> results = jpaBoardQueryRepository.findAllBoardListItemsByProjectId(projectId, page);
 
         // then
         assertThat(results).hasSize(expectedCount);
@@ -77,19 +77,19 @@ class JpaBoardPagingQueryRepositoryTest {
         Long projectId = mockProjectId;
         long pageSize = 3;
         List<Board> all =
-                jpaBoardPagingQueryRepository.findAll().stream()
+                jpaBoardQueryRepository.findAll().stream()
                         .sorted(Comparator.comparing(Board::getCreatedAt).reversed()).toList();
 
         // when
-        List<BoardListItem> results1 = jpaBoardPagingQueryRepository.findAllBoardListItemsInfiniteScroll(projectId,
+        List<BoardListItem> results1 = jpaBoardQueryRepository.findAllBoardListItemsInfiniteScroll(projectId,
                 pageSize);
-        List<BoardListItem> results2 = jpaBoardPagingQueryRepository.findAllBoardListItemsInfiniteScroll(projectId,
+        List<BoardListItem> results2 = jpaBoardQueryRepository.findAllBoardListItemsInfiniteScroll(projectId,
                 pageSize, Long.valueOf(results1.getLast().getBoardId()));
-        List<BoardListItem> results3 = jpaBoardPagingQueryRepository.findAllBoardListItemsInfiniteScroll(projectId,
+        List<BoardListItem> results3 = jpaBoardQueryRepository.findAllBoardListItemsInfiniteScroll(projectId,
                 pageSize, Long.valueOf(results2.getLast().getBoardId()));
-        List<BoardListItem> results4 = jpaBoardPagingQueryRepository.findAllBoardListItemsInfiniteScroll(projectId,
+        List<BoardListItem> results4 = jpaBoardQueryRepository.findAllBoardListItemsInfiniteScroll(projectId,
                 pageSize, Long.valueOf(results3.getLast().getBoardId()));
-        List<BoardListItem> results5 = jpaBoardPagingQueryRepository.findAllBoardListItemsInfiniteScroll(projectId,
+        List<BoardListItem> results5 = jpaBoardQueryRepository.findAllBoardListItemsInfiniteScroll(projectId,
                 pageSize, Long.valueOf(results4.getLast().getBoardId()));
 
         // then
@@ -113,12 +113,12 @@ class JpaBoardPagingQueryRepositoryTest {
         // given
         Long projectId = mockProjectId;
         List<Board> all =
-                jpaBoardPagingQueryRepository.findAll().stream()
+                jpaBoardQueryRepository.findAll().stream()
                         .sorted(Comparator.comparing(Board::getCreatedAt).reversed()).toList();
         BoardId boardId = all.getFirst().getBoardId();
 
         // when
-        Optional<BoardDetail> result = jpaBoardPagingQueryRepository.findBoardDetailBy(projectId, boardId.getId());
+        Optional<BoardDetail> result = jpaBoardQueryRepository.findBoardDetailBy(projectId, boardId.getId());
 
         // then
         assertThat(result).isPresent();
@@ -132,7 +132,7 @@ class JpaBoardPagingQueryRepositoryTest {
         Long wrongBoardId = Long.MAX_VALUE;
 
         // when
-        Optional<BoardDetail> result = jpaBoardPagingQueryRepository.findBoardDetailBy(projectId, wrongBoardId);
+        Optional<BoardDetail> result = jpaBoardQueryRepository.findBoardDetailBy(projectId, wrongBoardId);
 
         // then
         assertThat(result).isEmpty();

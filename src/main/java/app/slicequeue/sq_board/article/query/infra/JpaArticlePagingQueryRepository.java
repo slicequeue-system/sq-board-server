@@ -1,0 +1,61 @@
+package app.slicequeue.sq_board.article.query.infra;
+
+import app.slicequeue.sq_board.article.command.domain.Article;
+import app.slicequeue.sq_board.article.command.domain.ArticleId;
+import app.slicequeue.sq_board.article.query.presentation.dto.ArticlePageResponse;
+import app.slicequeue.sq_board.article.query.presentation.dto.ArticlePageResponse.ArticleListItem;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface JpaArticlePagingQueryRepository extends JpaRepository<Article, ArticleId> {
+
+    @Query(value = """
+                SELECT
+                    t2.article_id, t2.board_id, t2.title, t2.writer_id, t2.writer_name, t2.tags, t2.content, t2.deleted_at, t2.created_at, t2.updated_at
+                FROM (
+                    SELECT article_id
+                    FROM article
+                    WHERE board_id = :boardId
+                        AND deleted_at is null
+                    ORDER BY article_id desc
+                    LIMIT :limit OFFSET :offset
+                ) t1 left join article t2 on t1.article_id = t2.article_id;
+                
+            """, nativeQuery = true)
+    List<Article> findAllBy(
+            @Param("boardId") long boardId,
+            @Param("offset") long offset,
+            @Param("limit") long limit);
+
+
+    @Query(value = """
+                SELECT
+                    t2.article_id, t2.title, t2.writer_name, t2.created_at, t2.updated_at
+                FROM (
+                    SELECT article_id
+                    FROM article
+                    WHERE board_id = :boardId
+                    ORDER BY article_id desc
+                    LIMIT :limit OFFSET :offset
+                ) t1 left join article t2 on t1.article_id = t2.article_id;
+                
+            """, nativeQuery = true)
+    List<ArticleListItem> findAllArticleListItemBy( // FIXME H2 테스트에서는 ArticleListItem 생성자 맵핑 되나 mysql 에서는 안됨
+            @Param("boardId") Long boardId,
+            @Param("offset") long offset,
+            @Param("limit") long limit);
+
+    @Query(value = """
+                SELECT count(*) from (
+                    SELECT article_id FROM article
+                    WHERE board_id = :boardId
+                    LIMIT :limit
+                ) t1;
+            """, nativeQuery = true)
+    long count(@Param("boardId") long boardId, @Param("limit") long limit);
+}

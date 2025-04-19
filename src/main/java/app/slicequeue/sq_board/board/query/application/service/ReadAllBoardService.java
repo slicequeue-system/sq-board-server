@@ -2,7 +2,7 @@ package app.slicequeue.sq_board.board.query.application.service;
 
 import app.slicequeue.sq_board.board.query.application.dto.ReadAllByInfiniteScrollQuery;
 import app.slicequeue.sq_board.board.query.application.dto.ReadAllByPageQuery;
-import app.slicequeue.sq_board.board.query.infra.JpaBoardPagingQueryRepository;
+import app.slicequeue.sq_board.board.query.infra.JpaBoardQueryRepository;
 import app.slicequeue.sq_board.board.query.presentation.dto.BoardListItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReadAllBoardService {
 
-    private final JpaBoardPagingQueryRepository boardPagingQueryRepository;
+    private final JpaBoardQueryRepository boardPagingQueryRepository;
 
     public Page<BoardListItem> readAll(ReadAllByPageQuery query) {
         validateReadAllParam(query);
