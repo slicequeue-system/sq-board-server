@@ -2,7 +2,9 @@ package app.slicequeue.sq_board.board.query.presentation;
 
 import app.slicequeue.sq_board.board.query.application.dto.ReadAllByInfiniteScrollQuery;
 import app.slicequeue.sq_board.board.query.application.dto.ReadAllByPageQuery;
+import app.slicequeue.sq_board.board.query.application.dto.ReadDetailQuery;
 import app.slicequeue.sq_board.board.query.application.service.ReadAllBoardService;
+import app.slicequeue.sq_board.board.query.application.service.ReadDetailBoardService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
@@ -35,10 +37,15 @@ class BoardQueryControllerTest {
     @MockitoBean
     private ReadAllBoardService readAllBoardService;
 
+    @MockitoBean
+    private ReadDetailBoardService readDetailBoardService;
+
     @Captor
     private ArgumentCaptor<ReadAllByPageQuery> pageQueryArgumentCaptor;
     @Captor
     private ArgumentCaptor<ReadAllByInfiniteScrollQuery> infiniteScrollQueryArgumentCaptor;
+    @Captor
+    private ArgumentCaptor<ReadDetailQuery> detailQueryArgumentCaptor;
 
     @Autowired
     private MockMvc mockMvc;
@@ -187,5 +194,52 @@ class BoardQueryControllerTest {
         verify(readAllBoardService, times(0)).readAllInfiniteScroll(any());
         result.andDo(print())
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void 게시판상세조회API는_정상요청이_들어올_경우_요청객체를_쿼리객체로_전환하여_게시판_조회를_한다() throws Exception {
+        // given
+        String targetUrl = "/v1/boards/{boardId}";
+        long projectId = 1L;
+        long boardId = 123;
+
+        // when
+        ResultActions result = mockMvc.perform(
+                MockMvcRequestBuilders.get(targetUrl, String.valueOf(boardId))
+                        .queryParam("projectId", String.valueOf(projectId))
+        );
+
+        // then
+        result.andDo(print()).andExpect(status().isOk());
+        verify(readDetailBoardService, times(1)).readDetail(detailQueryArgumentCaptor.capture());
+        ReadDetailQuery value = detailQueryArgumentCaptor.getValue();
+        assertThat(value).isNotNull();
+        assertThat(value.projectId()).isEqualTo(projectId);
+        assertThat(value.boardId().getId()).isEqualTo(boardId);
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidReadDetailRequests")
+    void 게시판상세조회API는_비정상요청이_들어올_경우_400응답을_한다(Long projectId, String boardId) throws Exception {
+        // given
+        String targetUrl = "/v1/boards/{boardId}";
+
+        // when
+        ResultActions result = mockMvc.perform(
+                MockMvcRequestBuilders.get(targetUrl, String.valueOf(boardId))
+                        .queryParam("projectId", String.valueOf(projectId))
+        );
+
+        // then
+        result.andDo(print()).andExpect(status().isBadRequest());
+        verify(readDetailBoardService, times(0)).readDetail(detailQueryArgumentCaptor.capture());
+    }
+
+    public static Stream<Arguments> invalidReadDetailRequests() {
+        return Stream.of(
+                Arguments.of(null, null),
+                Arguments.of(null, "1"),
+                Arguments.of(1L, null)
+        );
     }
 }

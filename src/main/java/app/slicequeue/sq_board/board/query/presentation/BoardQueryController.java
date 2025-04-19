@@ -3,18 +3,19 @@ package app.slicequeue.sq_board.board.query.presentation;
 import app.slicequeue.common.dto.CommonResponse;
 import app.slicequeue.sq_board.board.query.application.dto.ReadAllByInfiniteScrollQuery;
 import app.slicequeue.sq_board.board.query.application.dto.ReadAllByPageQuery;
+import app.slicequeue.sq_board.board.query.application.dto.ReadDetailQuery;
 import app.slicequeue.sq_board.board.query.application.service.ReadAllBoardService;
+import app.slicequeue.sq_board.board.query.application.service.ReadDetailBoardService;
+import app.slicequeue.sq_board.board.query.presentation.dto.BoardDetail;
 import app.slicequeue.sq_board.board.query.presentation.dto.BoardListItem;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ import java.util.List;
 public class BoardQueryController {
 
     private final ReadAllBoardService readAllBoardService;
+    private final ReadDetailBoardService readDetailBoardService;
 
     @GetMapping
     public CommonResponse<Page<BoardListItem>> readAll(
@@ -42,5 +44,14 @@ public class BoardQueryController {
         ReadAllByInfiniteScrollQuery query = ReadAllByInfiniteScrollQuery.of(projectId, pageSize, lastBoardId);
         List<BoardListItem> all = readAllBoardService.readAllInfiniteScroll(query);
         return CommonResponse.success(all);
+    }
+
+    @GetMapping("/{boardId}")
+    public CommonResponse<BoardDetail> readDetail(
+            @RequestParam("projectId") Long projectId,
+            @PathVariable("boardId") Long boardId) {
+        ReadDetailQuery query = ReadDetailQuery.of(projectId, boardId);
+        BoardDetail detail = readDetailBoardService.readDetail(query);
+        return CommonResponse.success(detail);
     }
 }
