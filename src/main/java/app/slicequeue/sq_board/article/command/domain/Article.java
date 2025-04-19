@@ -63,4 +63,8 @@ public class Article extends BaseTimeSoftDeleteEntity {
         this.content = command.content();
         this.tags = command.tags();
     }
+
+    public void delete() {
+        nowDeletedAt();
+    }
 }

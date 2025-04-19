@@ -9,5 +9,5 @@ public interface ArticleRepository {
 
     Article save(Article board);
 
-    Optional<Article> findByArticleId(ArticleId articleId);
+    Optional<Article> findByArticleIdAndDeletedAtIsNull(ArticleId articleId);
 }
