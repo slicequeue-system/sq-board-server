@@ -3,6 +3,7 @@ package app.slicequeue.sq_board.board.query.infra;
 import app.slicequeue.sq_board.board.BoardTestFixture;
 import app.slicequeue.sq_board.board.command.domain.Board;
 import app.slicequeue.sq_board.board.command.domain.BoardId;
+import app.slicequeue.sq_board.board.query.presentation.dto.BoardDetail;
 import app.slicequeue.sq_board.board.query.presentation.dto.BoardListItem;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Sort;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -104,5 +106,35 @@ class JpaBoardPagingQueryRepositoryTest {
 
         assertThat(Stream.concat(Stream.concat(Stream.concat(results1.stream(), results2.stream()), results3.stream()),
                 results4.stream())).isSortedAccordingTo(Comparator.comparing(BoardListItem::getBoardId).reversed());
+    }
+
+    @Test
+    void 프로젝트식별값과_게시판식별값을_통해_게시판_단건상세조회를한다_있는_경우_옵셔널객체() {
+        // given
+        Long projectId = mockProjectId;
+        List<Board> all =
+                jpaBoardPagingQueryRepository.findAll().stream()
+                        .sorted(Comparator.comparing(Board::getCreatedAt).reversed()).toList();
+        BoardId boardId = all.getFirst().getBoardId();
+
+        // when
+        Optional<BoardDetail> result = jpaBoardPagingQueryRepository.findBoardDetailBy(projectId, boardId.getId());
+
+        // then
+        assertThat(result).isPresent();
+        assertThat(result.get().getBoardId()).isEqualTo(boardId.toString());
+    }
+
+    @Test
+    void 프로젝트식별값과_게시판식별값을_통해_게시판_단건상세조회를한다_없는_경우_빈옵셔널객체() {
+        // given
+        Long projectId = mockProjectId;
+        Long wrongBoardId = Long.MAX_VALUE;
+
+        // when
+        Optional<BoardDetail> result = jpaBoardPagingQueryRepository.findBoardDetailBy(projectId, wrongBoardId);
+
+        // then
+        assertThat(result).isEmpty();
     }
 }

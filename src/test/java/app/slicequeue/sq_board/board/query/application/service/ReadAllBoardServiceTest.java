@@ -1,11 +1,8 @@
 package app.slicequeue.sq_board.board.query.application.service;
 
-import app.slicequeue.sq_board.board.BoardTestFixture;
 import app.slicequeue.sq_board.board.query.application.dto.ReadAllByInfiniteScrollQuery;
 import app.slicequeue.sq_board.board.query.application.dto.ReadAllByPageQuery;
 import app.slicequeue.sq_board.board.query.infra.JpaBoardPagingQueryRepository;
-import app.slicequeue.sq_board.board.query.presentation.dto.BoardListItem;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,16 +11,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.List;
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -93,8 +85,7 @@ class ReadAllBoardServiceTest {
 
     @ParameterizedTest
     @MethodSource("invalidReadAllByInfiniteScrollQueries")
-    void 비정상_무한스크롤_조회쿼리를_통해_예외가발생한다(ReadAllByInfiniteScrollQuery query) {
-        // given
+    void 비정상_무한스크롤_조회쿼리를_통해_예외가발생한다(ReadAllByInfiniteScrollQuery query) { // given
 
         // when & then
         assertThatThrownBy(() -> readAllBoardService.readAllInfiniteScroll(query))
