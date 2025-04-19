@@ -2,6 +2,7 @@ package app.slicequeue.sq_board.article.command.domain;
 
 import app.slicequeue.common.base.time_entity.BaseTimeSoftDeleteEntity;
 import app.slicequeue.sq_board.article.command.domain.dto.CreateArticleCommand;
+import app.slicequeue.sq_board.article.command.domain.dto.UpdateArticleCommand;
 import app.slicequeue.sq_board.board.command.domain.BoardId;
 import app.slicequeue.sq_board.common.util.StringListConverter;
 import jakarta.persistence.*;
@@ -55,5 +56,11 @@ public class Article extends BaseTimeSoftDeleteEntity {
 
         article.articleId = ArticleId.generateId();
         return article;
+    }
+
+    public void update(UpdateArticleCommand command) {
+        this.title = command.title();
+        this.content = command.content();
+        this.tags = command.tags();
     }
 }

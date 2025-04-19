@@ -14,4 +14,5 @@ import java.util.Optional;
 @Repository
 public interface JpaArticleRepository extends ArticleRepository, JpaRepository<Article, ArticleId> {
 
+    Optional<Article> findByArticleId(ArticleId articleId);
 }
