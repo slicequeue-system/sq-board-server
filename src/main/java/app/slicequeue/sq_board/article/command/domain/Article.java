@@ -11,13 +11,15 @@ import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.List;
 
+@Getter
 @Table(name = "article", indexes = {
         @Index(name = "idx_board_id_article_id", columnList = "board_id,article_id desc")})
-@Getter
 @Entity
+@SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Article extends BaseTimeSoftDeleteEntity {
 

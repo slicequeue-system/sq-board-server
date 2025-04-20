@@ -2,7 +2,7 @@ package app.slicequeue.sq_board.board.query.application.service;
 
 import app.slicequeue.sq_board.board.query.application.dto.ReadAllByInfiniteScrollQuery;
 import app.slicequeue.sq_board.board.query.application.dto.ReadAllByPageQuery;
-import app.slicequeue.sq_board.board.query.infra.JpaBoardPagingQueryRepository;
+import app.slicequeue.sq_board.board.query.infra.JpaBoardQueryRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,7 +26,7 @@ class ReadAllBoardServiceTest {
     ReadAllBoardService readAllBoardService;
 
     @Mock
-    JpaBoardPagingQueryRepository boardPagingQueryRepository;
+    JpaBoardQueryRepository boardPagingQueryRepository;
 
     @Test
     void 페이징_조회쿼리를_통해_게시글을_복수조회한다() {

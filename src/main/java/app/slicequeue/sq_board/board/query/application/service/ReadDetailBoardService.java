@@ -2,7 +2,7 @@ package app.slicequeue.sq_board.board.query.application.service;
 
 import app.slicequeue.common.exception.NotFoundException;
 import app.slicequeue.sq_board.board.query.application.dto.ReadDetailQuery;
-import app.slicequeue.sq_board.board.query.infra.JpaBoardPagingQueryRepository;
+import app.slicequeue.sq_board.board.query.infra.JpaBoardQueryRepository;
 import app.slicequeue.sq_board.board.query.presentation.dto.BoardDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import org.springframework.util.Assert;
 @RequiredArgsConstructor
 public class ReadDetailBoardService {
 
-    private final JpaBoardPagingQueryRepository boardPagingQueryRepository;
+    private final JpaBoardQueryRepository boardPagingQueryRepository;
 
     public BoardDetail readDetail(ReadDetailQuery query) {
         validateReadDetailParam(query);
