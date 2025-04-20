@@ -1,7 +1,7 @@
 package app.slicequeue.sq_board.article.query.application.service;
 
 import app.slicequeue.sq_board.article.query.application.dto.ReadAllArticlePagingQuery;
-import app.slicequeue.sq_board.article.query.infra.JpaArticlePagingQueryRepository;
+import app.slicequeue.sq_board.article.query.infra.JpaArticleQueryRepository;
 import app.slicequeue.sq_board.article.query.presentation.dto.ArticlePageResponse;
 import app.slicequeue.sq_board.article.query.presentation.dto.ArticlePageResponse.ArticleListItem;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReadAllArticlePagingService {
 
-    private final JpaArticlePagingQueryRepository articlePagingQueryRepository;
+    private final JpaArticleQueryRepository articlePagingQueryRepository;
     private static final int movablePageCount = 10;
 
     public ArticlePageResponse readAll(ReadAllArticlePagingQuery query) {

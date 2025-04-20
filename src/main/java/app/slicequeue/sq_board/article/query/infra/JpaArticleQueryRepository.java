@@ -2,17 +2,20 @@ package app.slicequeue.sq_board.article.query.infra;
 
 import app.slicequeue.sq_board.article.command.domain.Article;
 import app.slicequeue.sq_board.article.command.domain.ArticleId;
-import app.slicequeue.sq_board.article.query.presentation.dto.ArticlePageResponse;
+import app.slicequeue.sq_board.article.query.presentation.dto.ArticleDetail;
 import app.slicequeue.sq_board.article.query.presentation.dto.ArticlePageResponse.ArticleListItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface JpaArticlePagingQueryRepository extends JpaRepository<Article, ArticleId> {
+@Transactional(readOnly = true)
+public interface JpaArticleQueryRepository extends JpaRepository<Article, ArticleId> {
 
     @Query(value = """
                 SELECT
@@ -21,7 +24,7 @@ public interface JpaArticlePagingQueryRepository extends JpaRepository<Article, 
                     SELECT article_id
                     FROM article
                     WHERE board_id = :boardId
-                        AND deleted_at is null
+                        AND deleted_at IS NULL
                     ORDER BY article_id desc
                     LIMIT :limit OFFSET :offset
                 ) t1 left join article t2 on t1.article_id = t2.article_id;
@@ -40,6 +43,7 @@ public interface JpaArticlePagingQueryRepository extends JpaRepository<Article, 
                     SELECT article_id
                     FROM article
                     WHERE board_id = :boardId
+                        AND deleted_at IS NULL
                     ORDER BY article_id desc
                     LIMIT :limit OFFSET :offset
                 ) t1 left join article t2 on t1.article_id = t2.article_id;
@@ -58,4 +62,18 @@ public interface JpaArticlePagingQueryRepository extends JpaRepository<Article, 
                 ) t1;
             """, nativeQuery = true)
     long count(@Param("boardId") long boardId, @Param("limit") long limit);
+
+
+    @Query("""
+            SELECT new app.slicequeue.sq_board.article.query.presentation.dto.ArticleDetail(
+                a.articleId,
+                a.title,
+                a.content,
+                a.writerName,
+                a.tags
+            )
+            FROM Article a
+            WHERE a.articleId = :articleId
+            """)
+    Optional<ArticleDetail> findArticleDetailBy(@Param("articleId") ArticleId articleId);
 }
