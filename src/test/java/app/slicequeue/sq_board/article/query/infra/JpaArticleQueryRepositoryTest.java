@@ -4,7 +4,7 @@ import app.slicequeue.sq_board.article.ArticleTestFixture;
 import app.slicequeue.sq_board.article.command.domain.Article;
 import app.slicequeue.sq_board.article.command.domain.ArticleId;
 import app.slicequeue.sq_board.article.query.presentation.dto.ArticleDetail;
-import app.slicequeue.sq_board.article.query.presentation.dto.ArticlePageResponse.ArticleListItem;
+import app.slicequeue.sq_board.article.query.presentation.dto.ArticleListItem;
 import app.slicequeue.sq_board.board.command.domain.BoardId;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

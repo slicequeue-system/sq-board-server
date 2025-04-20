@@ -3,7 +3,8 @@ package app.slicequeue.sq_board.article.query.infra;
 import app.slicequeue.sq_board.article.command.domain.Article;
 import app.slicequeue.sq_board.article.command.domain.ArticleId;
 import app.slicequeue.sq_board.article.query.presentation.dto.ArticleDetail;
-import app.slicequeue.sq_board.article.query.presentation.dto.ArticlePageResponse.ArticleListItem;
+import app.slicequeue.sq_board.article.query.presentation.dto.ArticleListItem;
+import app.slicequeue.sq_board.board.command.domain.BoardId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -50,9 +51,9 @@ public interface JpaArticleQueryRepository extends JpaRepository<Article, Articl
                 
             """, nativeQuery = true)
     List<ArticleListItem> findAllArticleListItemBy( // FIXME H2 테스트에서는 ArticleListItem 생성자 맵핑 되나 mysql 에서는 안됨
-            @Param("boardId") Long boardId,
-            @Param("offset") long offset,
-            @Param("limit") long limit);
+                                                    @Param("boardId") Long boardId,
+                                                    @Param("offset") long offset,
+                                                    @Param("limit") long limit);
 
     @Query(value = """
                 SELECT count(*) from (
@@ -62,6 +63,42 @@ public interface JpaArticleQueryRepository extends JpaRepository<Article, Articl
                 ) t1;
             """, nativeQuery = true)
     long count(@Param("boardId") long boardId, @Param("limit") long limit);
+
+
+    @Query("""
+            SELECT new app.slicequeue.sq_board.article.query.presentation.dto.ArticleListItem(
+                a.articleId,
+                a.title,
+                a.writerName,
+                a.createdAt,
+                a.updatedAt
+            )
+            FROM Article a
+            WHERE a.boardId = :boardId
+            ORDER BY a.articleId DESC
+            LIMIT :pageSize
+            """)
+    List<ArticleListItem> findAllArticleListItemInfiniteScroll(
+            @Param("boardId") BoardId boardId,
+            @Param("pageSize") long pageSize);
+
+    @Query("""
+            SELECT new app.slicequeue.sq_board.article.query.presentation.dto.ArticleListItem(
+                a.articleId,
+                a.title,
+                a.writerName,
+                a.createdAt,
+                a.updatedAt
+            )
+            FROM Article a
+            WHERE a.boardId = :boardId AND a.articleId < :lastArticleId
+            ORDER BY a.articleId desc
+            LIMIT :pageSize
+            """)
+    List<ArticleListItem> findAllArticleListItemInfiniteScroll(
+            @Param("boardId") BoardId boardId,
+            @Param("pageSize") long pageSize,
+            @Param("lastArticleId") ArticleId lastArticleId);
 
 
     @Query("""
