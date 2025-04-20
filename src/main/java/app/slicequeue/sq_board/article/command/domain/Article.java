@@ -70,4 +70,3 @@ public class Article extends BaseTimeSoftDeleteEntity {
         nowDeletedAt();
     }
 }
-
