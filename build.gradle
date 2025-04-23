@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'app.slicequeue'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 
 java {
 	toolchain {
@@ -45,6 +45,15 @@ dependencies {
 	implementation 'app.slicequeue:sq-common-response-and-exception:0.0.2'
 	implementation 'app.slicequeue:sq-common-base-time-entity:0.0.1'
 	implementation 'app.slicequeue:sq-common-snowflake:0.0.1'
+}
+
+bootBuildImage {
+	imageName = "${project.name}:${version}"
+	// 성공
+	environment = [
+			"BP_JVM_VERSION": "21",
+			"BP_JVM_TYPE": "JDK",
+	]
 }
 
 tasks.named('test') {
