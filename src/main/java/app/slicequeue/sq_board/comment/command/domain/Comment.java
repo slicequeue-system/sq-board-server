@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 
 @Table(name = "comment", indexes = {
         @Index(name = "idx_article_id_path", columnList = "article_id,path"),
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 })
 @Entity
 @Getter
+@SQLRestriction("deleted IS FALSE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseTimeSoftDeletedEntity {
 
@@ -36,14 +38,14 @@ public class Comment extends BaseTimeSoftDeletedEntity {
     @NotNull(message = "path must not be null")
     private CommentPath path;
 
-    public static Comment create(CreateCommentCommand command) {
+    public static Comment create(CreateCommentCommand command, CommentPath createdCommentPath) {
         Comment comment = new Comment();
-        comment.commentId = command.commentId();
+        comment.commentId = CommentId.generateId();
         comment.content = command.content();
         comment.articleId = command.articleId();
         comment.writerId = command.writerId();
         comment.writerNickname = command.writerNickname();
-        comment.path = command.path();
+        comment.path = createdCommentPath;
         return comment;
     }
 }

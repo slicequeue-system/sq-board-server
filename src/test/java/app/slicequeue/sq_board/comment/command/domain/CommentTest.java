@@ -19,7 +19,6 @@ class CommentTest {
     void 코멘트엔티티_삽입한다() {
         // given
         Comment comment = Comment.create(new CreateCommentCommand(
-                CommentId.generateId(),
                 "내용",
                 ArticleId.generateId(),
                 123L,

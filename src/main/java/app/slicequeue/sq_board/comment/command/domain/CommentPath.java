@@ -53,6 +53,11 @@ public class CommentPath {
         return path.substring(0, path.length() - DEPTH_CHUNK_SIZE);
     }
 
+    public CommentPath createChildCommentPath(CommentPath descendantsTopPath) {
+        return createChildCommentPath(
+                descendantsTopPath != null ? descendantsTopPath.getPath() : null);
+    }
+
     public CommentPath createChildCommentPath(String descendantsTopPath) {
         if (descendantsTopPath == null) {
             return CommentPath.create(path + MIN_CHUNK);
