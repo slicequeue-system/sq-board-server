@@ -28,3 +28,19 @@ CREATE TABLE article (
    PRIMARY KEY (article_id),
    KEY idx_board_id_article_id (board_id, article_id DESC)
 );
+
+create table comment(
+	comment_id bigint not null primary key,
+    content varchar(3000) not null,
+    article_id bigint not null,
+    parent_comment_id bigint NULL,
+    writer_id bigint not null,
+    writer_nickname varchar(100) not null,
+    path varchar(25) character set utf8mb4 collate utf8mb4_bin not null,
+    deleted boolean not null default false,
+    created_at datetime not null,
+    updated_at datetime NOT NULL
+);
+
+create unique index idx_article_id_path on comment(article_id asc, path asc);
+create unique index idx_article_id_parent_comment_id_comment_id on comment(article_id, parent_comment_id, comment_id);
