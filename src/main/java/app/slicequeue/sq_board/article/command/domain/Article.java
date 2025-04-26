@@ -1,6 +1,6 @@
 package app.slicequeue.sq_board.article.command.domain;
 
-import app.slicequeue.common.base.time_entity.BaseTimeSoftDeleteEntity;
+import app.slicequeue.common.base.time_entity.BaseTimeSoftDeletedAtEntity;
 import app.slicequeue.sq_board.article.command.domain.dto.CreateArticleCommand;
 import app.slicequeue.sq_board.article.command.domain.dto.UpdateArticleCommand;
 import app.slicequeue.sq_board.board.command.domain.BoardId;
@@ -21,7 +21,7 @@ import java.util.List;
 @Entity
 @SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Article extends BaseTimeSoftDeleteEntity {
+public class Article extends BaseTimeSoftDeletedAtEntity {
 
     @EmbeddedId
     private ArticleId articleId;
