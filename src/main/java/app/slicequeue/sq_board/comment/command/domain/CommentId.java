@@ -6,6 +6,7 @@ import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.Assert;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -14,12 +15,16 @@ public class CommentId extends AbstractSnowflakeId<CommentId> {
 
     static Snowflake snowflake = new Snowflake();
 
-    public CommentId(long id) {
+    public CommentId(Long id) {
         super(id);
     }
 
     public static CommentId generateId() {
         return new CommentId(snowflake.nextId());
+    }
+
+    public static CommentId from(Long idValue) {
+        return from(idValue, CommentId.class);
     }
 
     @Override

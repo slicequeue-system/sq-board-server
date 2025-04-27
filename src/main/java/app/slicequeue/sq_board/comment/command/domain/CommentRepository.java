@@ -11,6 +11,8 @@ public interface CommentRepository {
 
     Comment save(Comment comment);
 
+    Optional<Comment> findByCommentId(CommentId commentId);
+
     Optional<Comment> findByPath(CommentPath path);
 
     Optional<CommentPath> findDescendantsTopPath(@Param("articleId") ArticleId articleId,
