@@ -25,11 +25,20 @@ public class CommentPath {
             String.valueOf(CHARSET.charAt(CHARSET.length() - 1)).repeat(DEPTH_CHUNK_SIZE); // zzzzz
 
     public static CommentPath create(String path) {
+        if (path == null) {
+            return CommentPath.empty();
+        }
         if (isDepthOverflowed(path)) {
             throw new IllegalStateException("depth overflowed");
         }
         CommentPath commentPath = new CommentPath();
         commentPath.path = path;
+        return commentPath;
+    }
+
+    public static CommentPath empty() {
+        CommentPath commentPath = new CommentPath();
+        commentPath.path = null;
         return commentPath;
     }
 
@@ -58,7 +67,7 @@ public class CommentPath {
                 descendantsTopPath != null ? descendantsTopPath.getPath() : null);
     }
 
-    public CommentPath createChildCommentPath(String descendantsTopPath) {
+    private CommentPath createChildCommentPath(String descendantsTopPath) {
         if (descendantsTopPath == null) {
             return CommentPath.create(path + MIN_CHUNK);
         }

@@ -24,7 +24,7 @@ class CommentTest {
                 123L,
                 "작성자 닉네임",
                 CommentPath.create("")
-        ));
+        ), CommentPath.create(""));
 
         // when
         Comment result = entityManager.persistAndFlush(comment);
