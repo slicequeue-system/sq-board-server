@@ -1,6 +1,6 @@
 package app.slicequeue.sq_board.board.command.domain;
 
-import app.slicequeue.common.base.time_entity.BaseTimeSoftDeleteEntity;
+import app.slicequeue.common.base.time_entity.BaseTimeSoftDeletedAtEntity;
 import app.slicequeue.sq_board.board.command.domain.dto.CreateBoardCommand;
 import app.slicequeue.sq_board.board.command.domain.dto.UpdateBoardCommand;
 import jakarta.persistence.EmbeddedId;
@@ -20,7 +20,7 @@ import org.springframework.util.Assert;
 @Entity
 @ToString
 @NoArgsConstructor
-public class Board extends BaseTimeSoftDeleteEntity {
+public class Board extends BaseTimeSoftDeletedAtEntity {
 
     static final int MIN_SIZE_NAME = 1;
     static final int MAX_SIZE_NAME = 100;
