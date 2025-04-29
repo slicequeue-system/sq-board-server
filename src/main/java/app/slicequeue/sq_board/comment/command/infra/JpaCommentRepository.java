@@ -15,6 +15,8 @@ public interface JpaCommentRepository extends JpaRepository<Comment, CommentId>,
 
     Comment save(Comment comment);
 
+    Optional<Comment> findByCommentId(CommentId commentId);
+
     Optional<Comment> findByPath(CommentPath path);
 
     @Query("""

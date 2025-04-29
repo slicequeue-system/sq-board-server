@@ -35,5 +35,4 @@ public class CreateCommentService {
         }
         return commentRepository.findByPath(parentPath).orElseThrow();
     }
-
 }

@@ -3,6 +3,7 @@ package app.slicequeue.sq_board.comment.command.domain;
 import app.slicequeue.common.base.time_entity.BaseTimeSoftDeletedEntity;
 import app.slicequeue.sq_board.article.command.domain.ArticleId;
 import app.slicequeue.sq_board.comment.command.domain.dto.CreateCommentCommand;
+import app.slicequeue.sq_board.comment.command.domain.dto.UpdateCommentCommand;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -47,6 +48,12 @@ public class Comment extends BaseTimeSoftDeletedEntity {
         comment.writerNickname = command.writerNickname();
         comment.path = createdCommentPath;
         return comment;
+    }
+
+    public void update(UpdateCommentCommand command) {
+        this.content = command.content();
+        this.writerNickname = command.writerNickname();
+        nowUpdateAt();
     }
 }
 
