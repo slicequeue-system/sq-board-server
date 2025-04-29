@@ -28,17 +28,18 @@ public abstract class AbstractSnowflakeId<T extends AbstractSnowflakeId<T>> impl
 
     protected abstract Snowflake getSnowflake();
 
+    @SuppressWarnings("unchecked") // 타입 안정성은 우리가 보장하고 있어서 문제 없음
     public T generate() {
         try {
-            T instance = (T) this.getClass().getDeclaredConstructor().newInstance();
+            var constructor = this.getClass().getDeclaredConstructor();
+            constructor.setAccessible(true); // 여기 추가! (Java 8)
+            T instance = (T) constructor.newInstance();
             instance.id = getSnowflake().nextId();
             return instance;
         } catch (Exception e) {
             throw new RuntimeException("ID 생성 실패", e);
         }
     }
-
-
 
     protected static <T extends AbstractSnowflakeId<T>> T from(Long id, Class<T> clazz) {
         Assert.notNull(id, "id must not be null");

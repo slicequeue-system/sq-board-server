@@ -2,9 +2,11 @@ package app.slicequeue.sq_board.comment.command.presentation;
 
 import app.slicequeue.common.dto.CommonResponse;
 import app.slicequeue.sq_board.comment.command.application.CreateCommentService;
+import app.slicequeue.sq_board.comment.command.application.DeleteCommentService;
 import app.slicequeue.sq_board.comment.command.application.UpdateCommentService;
 import app.slicequeue.sq_board.comment.command.domain.CommentId;
 import app.slicequeue.sq_board.comment.command.domain.dto.CreateCommentCommand;
+import app.slicequeue.sq_board.comment.command.domain.dto.DeleteCommentCommand;
 import app.slicequeue.sq_board.comment.command.domain.dto.UpdateCommentCommand;
 import app.slicequeue.sq_board.comment.command.presentation.dto.CreateCommentRequest;
 import app.slicequeue.sq_board.comment.command.presentation.dto.UpdateCommentRequest;
@@ -19,6 +21,7 @@ public class CommentCommandController {
 
     private final CreateCommentService createCommentService;
     private final UpdateCommentService updateCommentService;
+    private final DeleteCommentService deleteCommentService;
 
     @PostMapping
     public CommonResponse<String> create(@RequestBody @Valid CreateCommentRequest request) {
@@ -31,6 +34,12 @@ public class CommentCommandController {
                                          @RequestBody @Valid UpdateCommentRequest request) {
         UpdateCommentCommand command = UpdateCommentCommand.of(CommentId.from(commentId), request);
         return CommonResponse.success("updated", updateCommentService.updateComment(command).toString());
+    }
+
+    @DeleteMapping("/{commentId}")
+    public CommonResponse<String> delete(@PathVariable("commentId") Long commentId) {
+        DeleteCommentCommand command = DeleteCommentCommand.from(CommentId.from(commentId));
+        return CommonResponse.success("updated", deleteCommentService.deleteComment(command).toString());
     }
 
 }

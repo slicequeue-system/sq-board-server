@@ -55,5 +55,9 @@ public class Comment extends BaseTimeSoftDeletedEntity {
         this.writerNickname = command.writerNickname();
         nowUpdateAt();
     }
+
+    public void delete() {
+        super.delete();
+    }
 }
 
