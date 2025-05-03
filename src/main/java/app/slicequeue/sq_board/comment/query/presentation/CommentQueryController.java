@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CommentQueryController {
 
-    private final ReadCommentService readCommentService;
+  private final ReadCommentService readCommentService;
 
     @GetMapping
     public CommonResponse<PageResponse<CommentDetail>> readAll(
@@ -37,5 +37,4 @@ public class CommentQueryController {
         ReadCommentDetailQuery query = ReadCommentDetailQuery.from(id);
         return CommonResponse.success(readCommentService.read(query));
     }
-
 }

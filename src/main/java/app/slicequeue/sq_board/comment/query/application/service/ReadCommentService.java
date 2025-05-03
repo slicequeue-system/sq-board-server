@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ReadCommentService {
 
-    private final JpaCommentQueryRepository commentQueryRepository;
+  private final JpaCommentQueryRepository commentQueryRepository;
 
     public PageResponse<CommentDetail> readAll(ReadAllCommentsPageQuery query) {
         List<CommentDetail> comments = commentQueryRepository.findAllBy(
@@ -30,9 +30,10 @@ public class ReadCommentService {
         return PageResponse.of(comments, count);
     }
 
-    public CommentDetail read(ReadCommentDetailQuery query) {
-        return commentQueryRepository.findById(query.commentId())
-                .map(CommentDetail::from)
-                .orElseThrow(() -> new NotFoundException("댓글을 찾을 수 없습니다."));
-    }
+
+  public CommentDetail read(ReadCommentDetailQuery query) {
+    return commentQueryRepository.findById(query.commentId())
+        .map(CommentDetail::from)
+        .orElseThrow(() -> new NotFoundException("댓글을 찾을 수 없습니다."));
+  }
 }
