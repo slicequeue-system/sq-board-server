@@ -17,13 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 public interface JpaCommentQueryRepository extends JpaRepository<Comment, CommentId>, JpaCommentQueryRepositoryCustom {
 
   @Query(value = """
-      SELECT 
-            t2.comment_id, 
-            t2.content, 
-            t2.article_id, 
-            t2.parent_comment_id, 
-            t2.writer_id, 
-            t2.writer_nickname, 
+      SELECT
+            t2.comment_id,
+            t2.content,
+            t2.article_id,
+            t2.parent_comment_id,
+            t2.writer_id,
+            t2.writer_nickname,
             t2.path,
             t2.deleted,
             t2.created_at,
@@ -42,13 +42,13 @@ public interface JpaCommentQueryRepository extends JpaRepository<Comment, Commen
       @Param("offset") long offset);
 
   @Query(value = """
-      SELECT 
-            t2.comment_id, 
-            t2.content, 
-            t2.article_id, 
-            t2.parent_comment_id, 
-            t2.writer_id, 
-            t2.writer_nickname, 
+      SELECT
+            t2.comment_id,
+            t2.content,
+            t2.article_id,
+            t2.parent_comment_id,
+            t2.writer_id,
+            t2.writer_nickname,
             t2.path,
             t2.created_at,
             t2.updated_at
@@ -57,10 +57,10 @@ public interface JpaCommentQueryRepository extends JpaRepository<Comment, Commen
         FROM comment
         WHERE article_id = :articleId
         ORDER BY path ASC
-        limit :limit OFFSET :offset
+        LIMIT :limit OFFSET :offset
       ) t1 LEFT JOIN comment t2 ON t1.comment_id = t2.comment_id;
       """, nativeQuery = true)
-  List<CommentDetail> findAllCommentDetailsBy(
+  List<CommentDetail> findAllCommentDetailsBy( // FIXME H2 테스트에서는 CommentDetail 생성자 맵핑 되나 mysql 에서는 안됨
       @Param("articleId") long articleId,
       @Param("limit") long limit,
       @Param("offset") long offset);

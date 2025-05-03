@@ -11,7 +11,7 @@ public record ReadAllCommentsPageQuery(ArticleId articleId, long page, int size,
   }
 
   public long offset() {
-    return page * size;
+    return (page - 1) * size;
   }
 
   public long limit() {
