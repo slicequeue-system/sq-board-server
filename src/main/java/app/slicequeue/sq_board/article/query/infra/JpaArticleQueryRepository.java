@@ -28,7 +28,7 @@ public interface JpaArticleQueryRepository extends JpaRepository<Article, Articl
                         AND deleted_at IS NULL
                     ORDER BY article_id desc
                     LIMIT :limit OFFSET :offset
-                ) t1 left join article t2 on t1.article_id = t2.article_id;
+                ) t1 LEFT JOIN article t2 ON t1.article_id = t2.article_id;
                 
             """, nativeQuery = true)
     List<Article> findAllBy(
@@ -48,7 +48,6 @@ public interface JpaArticleQueryRepository extends JpaRepository<Article, Articl
                     ORDER BY article_id desc
                     LIMIT :limit OFFSET :offset
                 ) t1 left join article t2 on t1.article_id = t2.article_id;
-                
             """, nativeQuery = true)
     List<ArticleListItem> findAllArticleListItemBy( // FIXME H2 테스트에서는 ArticleListItem 생성자 맵핑 되나 mysql 에서는 안됨
                                                     @Param("boardId") Long boardId,
@@ -75,7 +74,7 @@ public interface JpaArticleQueryRepository extends JpaRepository<Article, Articl
             )
             FROM Article a
             WHERE a.boardId = :boardId
-            ORDER BY a.articleId DESC
+            ORDER BY a.articleId.id DESC
             LIMIT :pageSize
             """)
     List<ArticleListItem> findAllArticleListItemInfiniteScroll(
@@ -92,7 +91,7 @@ public interface JpaArticleQueryRepository extends JpaRepository<Article, Articl
             )
             FROM Article a
             WHERE a.boardId = :boardId AND a.articleId < :lastArticleId
-            ORDER BY a.articleId desc
+            ORDER BY a.articleId.id desc
             LIMIT :pageSize
             """)
     List<ArticleListItem> findAllArticleListItemInfiniteScroll(
