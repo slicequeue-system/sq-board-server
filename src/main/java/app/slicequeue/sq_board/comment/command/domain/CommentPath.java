@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Getter
-@ToString
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentPath {
@@ -105,5 +104,10 @@ public class CommentPath {
 
     private boolean isChunkOverflowed(String lastChunk) {
         return MAX_CHUNK.equals(lastChunk);
+    }
+
+    @Override
+    public String toString() {
+        return path;
     }
 }
