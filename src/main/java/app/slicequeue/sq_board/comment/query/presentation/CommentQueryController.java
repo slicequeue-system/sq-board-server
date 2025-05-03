@@ -1,12 +1,14 @@
 package app.slicequeue.sq_board.comment.query.presentation;
 
 import app.slicequeue.common.dto.CommonResponse;
+import app.slicequeue.sq_board.comment.query.application.dto.ReadAllCommentsInfiniteScrollQuery;
 import app.slicequeue.sq_board.comment.query.application.dto.ReadAllCommentsPageQuery;
 import app.slicequeue.sq_board.comment.query.application.dto.ReadCommentDetailQuery;
 import app.slicequeue.sq_board.comment.query.application.service.ReadCommentService;
 import app.slicequeue.sq_board.comment.query.presentation.dto.CommentDetail;
 import app.slicequeue.sq_board.comment.query.presentation.dto.PageResponse;
 import jakarta.validation.constraints.Positive;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,9 +34,20 @@ public class CommentQueryController {
         return CommonResponse.success(response);
     }
 
-    @GetMapping("/{commentId}")
-    public CommonResponse<CommentDetail> read(@PathVariable("commentId") Long id) {
-        ReadCommentDetailQuery query = ReadCommentDetailQuery.from(id);
-        return CommonResponse.success(readCommentService.read(query));
-    }
+  @GetMapping
+  public CommonResponse<List<CommentDetail>> readAllInfiniteScroll(
+      @RequestParam(value = "articleId") long articleId,
+      @RequestParam(value = "size", required = false, defaultValue = "15") long pageSize,
+      @RequestParam(value = "lastPath") String lastPath) {
+    ReadAllCommentsInfiniteScrollQuery query = ReadAllCommentsInfiniteScrollQuery.of(
+        articleId, pageSize, lastPath);
+    List<CommentDetail> details = readCommentService.readAllInfiniteScroll(query);
+    return CommonResponse.success(details);
+  }
+
+  @GetMapping("/{commentId}")
+  public CommonResponse<CommentDetail> read(@PathVariable("commentId") Long id) {
+    ReadCommentDetailQuery query = ReadCommentDetailQuery.from(id);
+    return CommonResponse.success(readCommentService.read(query));
+  }
 }

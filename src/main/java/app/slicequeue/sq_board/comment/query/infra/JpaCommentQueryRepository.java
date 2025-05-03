@@ -14,7 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional(readOnly = true)
-public interface JpaCommentQueryRepository extends JpaRepository<Comment, CommentId>, JpaCommentQueryRepositoryCustom {
+public interface JpaCommentQueryRepository extends JpaRepository<Comment, CommentId>,
+    JpaCommentQueryRepositoryCustom {
 
   @Query(value = """
       SELECT
@@ -65,6 +66,42 @@ public interface JpaCommentQueryRepository extends JpaRepository<Comment, Commen
       @Param("limit") long limit,
       @Param("offset") long offset);
 
+  @Query(value = """
+      SELECT comment_id,
+            content,
+            article_id,
+            parent_comment_id,
+            writer_id,
+            writer_nickname,
+            path,
+            created_at,
+            updated_at
+      FROM comment
+      WHERE article_id = :articleId
+      ORDER BY path ASC LIMIT :pageSize
+      """, nativeQuery = true)
+  List<CommentDetail> findAllCommentDetailsInfiniteScroll(
+      @Param("articleId") long articleId, @Param("pageSize") long pageSize);
+
+  @Query(value = """
+      SELECT comment_id,
+            content,
+            article_id,
+            parent_comment_id,
+            writer_id,
+            writer_nickname,
+            path,
+            created_at,
+            updated_at
+      FROM comment
+      WHERE article_id = :articleId AND path > :lastPath 
+      ORDER BY path ASC LIMIT :pageSize
+      """, nativeQuery = true)
+  List<CommentDetail> findAllCommentDetailsInfiniteScroll(
+      @Param("articleId") long articleId,
+      @Param("pageSize") long pageSize,
+      @Param("lastPath") String lastPath);
+
 
   @Query(value = """
       SELECT count(*) FROM (
@@ -74,4 +111,6 @@ public interface JpaCommentQueryRepository extends JpaRepository<Comment, Commen
       ) t1;
       """, nativeQuery = true)
   long count(@Param("articleId") long articleId, @Param("limit") long limit);
+
+
 }

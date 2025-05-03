@@ -1,7 +1,7 @@
 package app.slicequeue.sq_board.article.query.presentation;
 
 import app.slicequeue.common.dto.CommonResponse;
-import app.slicequeue.sq_board.article.query.application.dto.ReadAllArticleInfiniteScrollQuery;
+import app.slicequeue.sq_board.article.query.application.dto.ReadAllArticlesInfiniteScrollQuery;
 import app.slicequeue.sq_board.article.query.application.dto.ReadAllArticlesPagingQuery;
 import app.slicequeue.sq_board.article.query.application.dto.ReadArticleDetailQuery;
 import app.slicequeue.sq_board.article.query.application.service.ReadAllArticleInfiniteScrollService;
@@ -39,7 +39,7 @@ public class ArticleQueryController {
             @RequestParam("boardId") Long boardId,
             @RequestParam(value = "size", required = false, defaultValue = "15") Long pageSize,
             @RequestParam(value = "lastArticleId", required = false) Long lastArticleId) {
-        ReadAllArticleInfiniteScrollQuery query = ReadAllArticleInfiniteScrollQuery.of(boardId, pageSize, lastArticleId);
+        ReadAllArticlesInfiniteScrollQuery query = ReadAllArticlesInfiniteScrollQuery.of(boardId, pageSize, lastArticleId);
         List<ArticleListItem> all = readAllArticleInfiniteScrollService.findAll(query);
         return CommonResponse.success(all);
     }
