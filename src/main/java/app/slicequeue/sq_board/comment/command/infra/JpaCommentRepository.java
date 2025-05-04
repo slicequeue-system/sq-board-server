@@ -1,6 +1,5 @@
 package app.slicequeue.sq_board.comment.command.infra;
 
-import app.slicequeue.sq_board.article.command.domain.ArticleId;
 import app.slicequeue.sq_board.comment.command.domain.Comment;
 import app.slicequeue.sq_board.comment.command.domain.CommentId;
 import app.slicequeue.sq_board.comment.command.domain.CommentPath;
@@ -19,13 +18,16 @@ public interface JpaCommentRepository extends JpaRepository<Comment, CommentId>,
 
     Optional<Comment> findByPath(CommentPath path);
 
-    @Query("""
-            select c.path from Comment c
-            where c.articleId = :articleId
-            and c.path.path > :pathPrefix and c.path.path like :pathPrefix%
-            order by path.path desc limit 1
-            """)
-    Optional<CommentPath> findDescendantsTopPath(
-            @Param("articleId") ArticleId articleId,
+    @Query(value = """
+            SELECT c.path
+            FROM comment c
+            WHERE c.article_id = :articleId
+              AND c.path > :pathPrefix
+              AND c.path LIKE CONCAT(:pathPrefix, '%')
+            ORDER BY c.path DESC
+            LIMIT 1
+            """, nativeQuery = true)
+    Optional<String> findDescendantsTopPath(
+            @Param("articleId") Long articleId,
             @Param("pathPrefix") String pathPrefix);
 }
