@@ -4,13 +4,14 @@ import app.slicequeue.sq_board.article.command.domain.ArticleId;
 import app.slicequeue.sq_board.comment.command.domain.Comment;
 import app.slicequeue.sq_board.comment.command.domain.CommentId;
 import app.slicequeue.sq_board.comment.command.domain.CommentPath;
-import java.time.Instant;
-import java.time.OffsetDateTime;
+import jakarta.annotation.Nullable;
 import lombok.AccessLevel;
 import lombok.Getter;
-
-import java.util.Objects;
 import lombok.NoArgsConstructor;
+
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -60,5 +61,26 @@ public class CommentDetail {
         this.commentPath = commentPath;
         this.createdAt = createdAt.toInstant();
         this.updatedAt = updatedAt.toInstant();
+    }
+
+    public CommentDetail(
+            CommentId commentId,
+            String content,
+            ArticleId articleId,
+            @Nullable CommentId parentCommentId,
+            Long writerId,
+            String writerNickname,
+            CommentPath commentPath,
+            Instant createdAt,
+            Instant updatedAt) {
+        this.commentId = commentId.toString();
+        this.content = content;
+        this.articleId = articleId.toString();
+        this.parentCommentId = parentCommentId != null ? parentCommentId.toString() : null;
+        this.writerId = String.valueOf(writerId);
+        this.writerNickname = writerNickname;
+        this.commentPath = commentPath.toString();
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 }

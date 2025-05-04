@@ -19,11 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ReadCommentService {
 
-  private final JpaCommentQueryRepository commentQueryRepository;
+    private final JpaCommentQueryRepository commentQueryRepository;
 
     public PageResponse<CommentDetail> readAll(ReadAllCommentsPageQuery query) {
         List<CommentDetail> comments = commentQueryRepository.findAllBy(
-                query.articleId().getId(), query.limit(), query.offset())
+                        query.articleId().getId(), query.limit(), query.offset())
                 .stream()
                 .map(CommentDetail::from)
                 .toList();
@@ -32,21 +32,21 @@ public class ReadCommentService {
     }
 
 
-  public List<CommentDetail> readAllInfiniteScroll(ReadAllCommentsInfiniteScrollQuery query) {
-    if (query.isFirstPosition()) {
-      return commentQueryRepository
-          .findAllCommentDetailsInfiniteScroll(query.articleId().getId(), query.pageSize());
+    public List<CommentDetail> readAllInfiniteScroll(ReadAllCommentsInfiniteScrollQuery query) {
+        if (query.isFirstPosition()) {
+            return commentQueryRepository
+                    .findAllCommentDetailsInfiniteScroll(query.articleId(), query.pageSize());
+        }
+        return commentQueryRepository
+                .findAllCommentDetailsInfiniteScroll(
+                        query.articleId(),
+                        query.pageSize(),
+                        query.lastCommentPath());
     }
-    return commentQueryRepository
-        .findAllCommentDetailsInfiniteScroll(
-            query.articleId().getId(),
-            query.pageSize(),
-            query.lastCommentPath().getPath());
-  }
 
-  public CommentDetail read(ReadCommentDetailQuery query) {
-    return commentQueryRepository.findById(query.commentId())
-        .map(CommentDetail::from)
-        .orElseThrow(() -> new NotFoundException("댓글을 찾을 수 없습니다."));
-  }
+    public CommentDetail read(ReadCommentDetailQuery query) {
+        return commentQueryRepository.findById(query.commentId())
+                .map(CommentDetail::from)
+                .orElseThrow(() -> new NotFoundException("댓글을 찾을 수 없습니다."));
+    }
 }

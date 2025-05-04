@@ -8,7 +8,9 @@ import app.slicequeue.sq_board.comment.query.application.service.ReadCommentServ
 import app.slicequeue.sq_board.comment.query.presentation.dto.CommentDetail;
 import app.slicequeue.sq_board.comment.query.presentation.dto.PageResponse;
 import jakarta.validation.constraints.Positive;
+
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,37 +19,45 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CommentQueryController {
 
-  private final ReadCommentService readCommentService;
+    private final ReadCommentService readCommentService;
 
     @GetMapping
     public CommonResponse<PageResponse<CommentDetail>> readAll(
-            @RequestParam(value = "articleId") long articleId,
+            @RequestParam(value = "articleId")
+            long articleId,
             @RequestParam(value = "page", defaultValue = "1", required = false)
-            @Positive(message = "page must be positive.") long page,
+            @Positive(message = "page must be positive.")
+            long page,
             @RequestParam(value = "size", defaultValue = "15", required = false)
-            @Positive(message = "size must be positive.") int size,
+            @Positive(message = "size must be positive.")
+            int size,
             @RequestParam(value = "movablePageCount", defaultValue = "5", required = false)
-            @Positive(message = "movablePageCount must be positive.") int movablePageCount) {
+            @Positive(message = "movablePageCount must be positive.")
+            int movablePageCount) {
         ReadAllCommentsPageQuery query = ReadAllCommentsPageQuery.of(
                 articleId, page, size, movablePageCount);
         PageResponse<CommentDetail> response = readCommentService.readAll(query);
         return CommonResponse.success(response);
     }
 
-  @GetMapping
-  public CommonResponse<List<CommentDetail>> readAllInfiniteScroll(
-      @RequestParam(value = "articleId") long articleId,
-      @RequestParam(value = "size", required = false, defaultValue = "15") long pageSize,
-      @RequestParam(value = "lastPath") String lastPath) {
-    ReadAllCommentsInfiniteScrollQuery query = ReadAllCommentsInfiniteScrollQuery.of(
-        articleId, pageSize, lastPath);
-    List<CommentDetail> details = readCommentService.readAllInfiniteScroll(query);
-    return CommonResponse.success(details);
-  }
+    @GetMapping("/infinite-scroll")
+    public CommonResponse<List<CommentDetail>> readAllInfiniteScroll(
+            @RequestParam(value = "articleId")
+            long articleId,
+            @RequestParam(value = "size", required = false, defaultValue = "15")
+            @Positive(message = "size must be positive.")
+            long pageSize,
+            @RequestParam(value = "lastPath", required = false)
+            String lastPath) {
+        ReadAllCommentsInfiniteScrollQuery query = ReadAllCommentsInfiniteScrollQuery.of(
+                articleId, pageSize, lastPath);
+        List<CommentDetail> details = readCommentService.readAllInfiniteScroll(query);
+        return CommonResponse.success(details);
+    }
 
-  @GetMapping("/{commentId}")
-  public CommonResponse<CommentDetail> read(@PathVariable("commentId") Long id) {
-    ReadCommentDetailQuery query = ReadCommentDetailQuery.from(id);
-    return CommonResponse.success(readCommentService.read(query));
-  }
+    @GetMapping("/{commentId}")
+    public CommonResponse<CommentDetail> read(@PathVariable("commentId") Long id) {
+        ReadCommentDetailQuery query = ReadCommentDetailQuery.from(id);
+        return CommonResponse.success(readCommentService.read(query));
+    }
 }
