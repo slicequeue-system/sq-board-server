@@ -29,6 +29,7 @@ public class Comment extends BaseTimeSoftDeletedEntity {
     @NotNull(message = "content must not be null")
     private String content;
     @NotNull(message = "articleId must not be null")
+    @AttributeOverride(name = "id", column = @Column(name = "article_id"))
     private ArticleId articleId;
     @AttributeOverride(name = "id", column = @Column(name = "parent_comment_id"))
     private CommentId parentCommentId;
