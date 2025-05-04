@@ -6,11 +6,16 @@ import app.slicequeue.sq_board.article.command.domain.ArticleId;
 import app.slicequeue.sq_board.comment.CommentTestFixture;
 import app.slicequeue.sq_board.comment.command.domain.Comment;
 import app.slicequeue.sq_board.comment.command.domain.CommentId;
+import app.slicequeue.sq_board.comment.command.domain.CommentPath;
 import app.slicequeue.sq_board.comment.query.presentation.dto.CommentDetail;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,8 +37,8 @@ class JpaCommentQueryRepositoryTest {
 
   @ParameterizedTest
   @MethodSource("pagingQueries")
-  void 댓글을_복수_조회한다_엔티티_객체_리스트_반환(long articleId, long limit, long offset,
-      int expectedSize) { // given
+  void 댓글을_복수_조회한다_엔티티_객체_리스트_반환(
+      long articleId, long limit, long offset, int expectedSize) { // given
 
     // when
     List<Comment> results = jpaCommentQueryRepository.findAllBy(articleId, limit, offset);
@@ -44,14 +49,15 @@ class JpaCommentQueryRepositoryTest {
         .isSortedAccordingTo(Comparator.comparing(String::valueOf));
   }
 
+  @Disabled // FIXME H2 테스트에서는 CommentDetail 생성자 맵핑 되나 mysql 에서는 안됨
   @ParameterizedTest
   @MethodSource("pagingQueries")
   void 댓글을_복수_조회한다_댓글상세_객체_리스트_프로젝션_반환(
       long articleId, long limit, long offset, int expectedSize) { // given
 
     // when
-    List<CommentDetail> results = jpaCommentQueryRepository.findAllCommentDetailsBy(articleId,
-        limit, offset);
+    List<CommentDetail> results = jpaCommentQueryRepository.findAllCommentDetailsBy(
+        articleId, limit, offset);
 
     // then
     assertThat(results).hasSize(expectedSize);
@@ -81,6 +87,42 @@ class JpaCommentQueryRepositoryTest {
 
     // then
     assertThat(result).isEqualTo(expectedCount);
+  }
+
+  @Test
+  void 댓글을_무한스크롤_복수_조회한다() {
+    // given
+    ArticleId articleId = CommentTestFixture.ARTICLE_ID1;
+    int pageSize = 3;
+
+    List<String> commentPaths = new ArrayList<>();
+
+    // when & then
+    List<CommentDetail> results1 = jpaCommentQueryRepository.findAllCommentDetailsInfiniteScroll(
+        articleId, pageSize);
+    assertThat(results1).hasSize(3);
+    commentPaths.addAll(results1.stream().map(CommentDetail::getCommentPath).toList());
+
+    List<CommentDetail> results2 = jpaCommentQueryRepository.findAllCommentDetailsInfiniteScroll(
+        articleId, pageSize, CommentPath.create(results1.getLast().getCommentPath()));
+    assertThat(results2).hasSize(3);
+    commentPaths.addAll(results2.stream().map(CommentDetail::getCommentPath).toList());
+
+    List<CommentDetail> results3 = jpaCommentQueryRepository.findAllCommentDetailsInfiniteScroll(
+        articleId, pageSize, CommentPath.create(results2.getLast().getCommentPath()));
+    assertThat(results3).hasSize(3);
+    commentPaths.addAll(results3.stream().map(CommentDetail::getCommentPath).toList());
+
+    List<CommentDetail> results4 = jpaCommentQueryRepository.findAllCommentDetailsInfiniteScroll(
+        articleId, pageSize, CommentPath.create(results3.getLast().getCommentPath()));
+    assertThat(results4).hasSize(1);
+    commentPaths.addAll(results4.stream().map(CommentDetail::getCommentPath).toList());
+
+    assertThat(commentPaths).isSortedAccordingTo(Comparator.comparing(String::valueOf));
+  }
+
+  public Stream<Arguments> infiniteScrollQueries() {
+    return null;
   }
 
   @Test

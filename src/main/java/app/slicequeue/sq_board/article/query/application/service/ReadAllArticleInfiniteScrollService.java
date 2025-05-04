@@ -1,6 +1,6 @@
 package app.slicequeue.sq_board.article.query.application.service;
 
-import app.slicequeue.sq_board.article.query.application.dto.ReadAllArticleInfiniteScrollQuery;
+import app.slicequeue.sq_board.article.query.application.dto.ReadAllArticlesInfiniteScrollQuery;
 import app.slicequeue.sq_board.article.query.infra.JpaArticleQueryRepository;
 import app.slicequeue.sq_board.article.query.presentation.dto.ArticleListItem;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ public class ReadAllArticleInfiniteScrollService {
 
     private final JpaArticleQueryRepository articlePagingQueryRepository;
 
-    public List<ArticleListItem> findAll(ReadAllArticleInfiniteScrollQuery query) {
+    public List<ArticleListItem> findAll(ReadAllArticlesInfiniteScrollQuery query) {
         if (query.lastArticleId() == null) {
             return articlePagingQueryRepository.findAllArticleListItemInfiniteScroll(query.boardId(),
                     query.pageSize());

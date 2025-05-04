@@ -1,6 +1,7 @@
 package app.slicequeue.sq_board.comment.query.application.service;
 
 import app.slicequeue.common.exception.NotFoundException;
+import app.slicequeue.sq_board.comment.query.application.dto.ReadAllCommentsInfiniteScrollQuery;
 import app.slicequeue.sq_board.comment.query.application.dto.ReadAllCommentsPageQuery;
 import app.slicequeue.sq_board.comment.query.application.dto.ReadCommentDetailQuery;
 import app.slicequeue.sq_board.comment.query.infra.JpaCommentQueryRepository;
@@ -22,12 +23,25 @@ public class ReadCommentService {
 
     public PageResponse<CommentDetail> readAll(ReadAllCommentsPageQuery query) {
         List<CommentDetail> comments = commentQueryRepository.findAllBy(
-                query.articleId().getId(), query.limit(), query.offset())
+                        query.articleId().getId(), query.limit(), query.offset())
                 .stream()
                 .map(CommentDetail::from)
                 .toList();
         long count = commentQueryRepository.count(query.articleId().getId(), query.limitForCount());
         return PageResponse.of(comments, count);
+    }
+
+
+    public List<CommentDetail> readAllInfiniteScroll(ReadAllCommentsInfiniteScrollQuery query) {
+        if (query.isFirstPosition()) {
+            return commentQueryRepository
+                    .findAllCommentDetailsInfiniteScroll(query.articleId(), query.pageSize());
+        }
+        return commentQueryRepository
+                .findAllCommentDetailsInfiniteScroll(
+                        query.articleId(),
+                        query.pageSize(),
+                        query.lastCommentPath());
     }
 
     public CommentDetail read(ReadCommentDetailQuery query) {
