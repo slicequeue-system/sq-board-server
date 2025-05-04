@@ -4,10 +4,8 @@ import app.slicequeue.common.base.id_entity.BaseSnowflakeId;
 import app.slicequeue.common.snowflake.Snowflake;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
 public class ArticleId extends BaseSnowflakeId<ArticleId> {

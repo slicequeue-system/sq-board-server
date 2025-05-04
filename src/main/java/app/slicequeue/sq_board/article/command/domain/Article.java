@@ -28,6 +28,7 @@ public class Article extends BaseTimeSoftDeletedAtEntity {
     private ArticleId articleId;
 
     @NotNull(message = "boardId must not be null")
+    @AttributeOverride(name = "id", column = @Column(name = "board_id"))
     private BoardId boardId; // shard key
 
     @Size(min = 1, max = 200)

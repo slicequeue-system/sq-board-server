@@ -3,10 +3,7 @@ package app.slicequeue.sq_board.board.command.domain;
 import app.slicequeue.common.base.time_entity.BaseTimeSoftDeletedAtEntity;
 import app.slicequeue.sq_board.board.command.domain.dto.CreateBoardCommand;
 import app.slicequeue.sq_board.board.command.domain.dto.UpdateBoardCommand;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -27,6 +24,7 @@ public class Board extends BaseTimeSoftDeletedAtEntity {
     static final int MAX_SIZE_DESCRIPTION = 512;
 
     @EmbeddedId
+    @AttributeOverride(name = "id", column = @Column(name = "board_id"))
     private BoardId boardId;
     @NotNull
     @NotBlank
