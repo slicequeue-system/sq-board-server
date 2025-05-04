@@ -22,8 +22,11 @@ public class CreateCommentService {
 
         Comment comment = Comment.create(command,
                 parentCommentPath.createChildCommentPath(
-                        commentRepository.findDescendantsTopPath(command.articleId(),
-                                parentCommentPath.getPath()).orElse(null))
+                        commentRepository.findDescendantsTopPath(
+                                command.articleId().getId(),
+                                parentCommentPath.getPath())
+                                .map(CommentPath::create)
+                                .orElse(null))
         );
         return commentRepository.save(comment).getCommentId();
     }
