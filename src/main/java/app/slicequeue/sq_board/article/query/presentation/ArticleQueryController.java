@@ -1,15 +1,15 @@
 package app.slicequeue.sq_board.article.query.presentation;
 
 import app.slicequeue.common.dto.CommonResponse;
+import app.slicequeue.common.dto.PageResponse;
 import app.slicequeue.sq_board.article.query.application.dto.ReadAllArticlesInfiniteScrollQuery;
 import app.slicequeue.sq_board.article.query.application.dto.ReadAllArticlesPagingQuery;
 import app.slicequeue.sq_board.article.query.application.dto.ReadArticleDetailQuery;
 import app.slicequeue.sq_board.article.query.application.service.ReadAllArticleInfiniteScrollService;
-import app.slicequeue.sq_board.article.query.application.service.ReadAllArticlePagingService;
+import app.slicequeue.sq_board.article.query.application.service.ReadAllArticlesPagingService;
 import app.slicequeue.sq_board.article.query.application.service.ReadDetailArticleService;
 import app.slicequeue.sq_board.article.query.presentation.dto.ArticleDetail;
 import app.slicequeue.sq_board.article.query.presentation.dto.ArticleListItem;
-import app.slicequeue.sq_board.article.query.presentation.dto.ArticlePageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,17 +20,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ArticleQueryController {
 
-    private final ReadAllArticlePagingService readAllArticlePagingService;
+    private final ReadAllArticlesPagingService readAllArticlesPagingService;
     private final ReadAllArticleInfiniteScrollService readAllArticleInfiniteScrollService;
     private final ReadDetailArticleService readDetailArticleService;
 
     @GetMapping
-    public CommonResponse<ArticlePageResponse> readAll(
+    public CommonResponse<PageResponse<ArticleListItem>> readAll(
             @RequestParam("boardId") Long boardId,
             @RequestParam(value = "page", defaultValue = "0") Long page,
             @RequestParam(value = "size", defaultValue = "10") Long size) {
         ReadAllArticlesPagingQuery query = ReadAllArticlesPagingQuery.of(boardId, page, size);
-        ArticlePageResponse response = readAllArticlePagingService.findAll(query);
+        PageResponse<ArticleListItem> response = readAllArticlesPagingService.findAll(query);
         return CommonResponse.success(response);
     }
 

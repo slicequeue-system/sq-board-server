@@ -1,12 +1,12 @@
 package app.slicequeue.sq_board.comment.query.presentation;
 
 import app.slicequeue.common.dto.CommonResponse;
+import app.slicequeue.common.dto.PageResponse;
 import app.slicequeue.sq_board.comment.query.application.dto.ReadAllCommentsInfiniteScrollQuery;
 import app.slicequeue.sq_board.comment.query.application.dto.ReadAllCommentsPageQuery;
 import app.slicequeue.sq_board.comment.query.application.dto.ReadCommentDetailQuery;
 import app.slicequeue.sq_board.comment.query.application.service.ReadCommentService;
 import app.slicequeue.sq_board.comment.query.presentation.dto.CommentDetail;
-import app.slicequeue.sq_board.comment.query.presentation.dto.PageResponse;
 import jakarta.validation.constraints.Positive;
 
 import java.util.List;
