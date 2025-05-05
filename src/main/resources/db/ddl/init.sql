@@ -44,3 +44,42 @@ create table comment(
 
 create unique index idx_article_id_path on comment(article_id asc, path asc);
 create unique index idx_article_id_parent_comment_id_comment_id on comment(article_id, parent_comment_id, comment_id);
+
+CREATE TABLE article_reaction (
+  article_reaction_id BIGINT NOT NULL COMMENT '게시글 리액션 식별값',
+  article_id BIGINT NOT NULL COMMENT '좋아요 대상 글 식별값',
+  emoji VARCHAR(6) NOT NULL COMMENT '사용자 리액션 이모지',
+  user_id BIGINT NOT NULL COMMENT '사용자 식별값',
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성일시',
+  PRIMARY KEY (article_reaction_id),
+  UNIQUE INDEX unq_article_id_emoji_user_id (article_id, emoji, user_id),
+  INDEX fk_ar_article_id_a_article_id_idx (article_id),
+  CONSTRAINT fk_ar_article_id_a_article_id
+    FOREIGN KEY (article_id)
+    REFERENCES article.article (article_id))
+COMMENT = '글 리엑션';
+
+CREATE TABLE article_reaction (
+  article_reaction_id BIGINT NOT NULL COMMENT '게시글 리액션 식별값',
+  article_id BIGINT NOT NULL COMMENT '좋아요 대상 글 식별값',
+  emoji VARCHAR(6) NOT NULL COMMENT '사용자 리액션 이모지',
+  user_id BIGINT NOT NULL COMMENT '사용자 식별값',
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성일시',
+  PRIMARY KEY (article_reaction_id),
+  UNIQUE INDEX unq_article_id_emoji_user_id (article_id, emoji, user_id),
+  CONSTRAINT fk_ar_article_id_a_article_id
+    FOREIGN KEY (article_id)
+    REFERENCES article(article_id))
+COMMENT = '글 리엑션';
+
+CREATE TABLE article_reaction_count (
+  article_id BIGINT NOT NULL COMMENT '게시글 식별값',
+  emoji VARCHAR(6) NOT NULL COMMENT '사용자 리액션 이모지',
+  count INT NOT NULL DEFAULT 0 COMMENT '사용자 리액션 이모지 숫자',
+  PRIMARY KEY (article_id, emoji),
+  CONSTRAINT fk_arc_article_id_a_article_id
+    FOREIGN KEY (article_id)
+    REFERENCES article(article_id)
+)
+COMMENT = '게시글 리액션 카운트 집계';
+

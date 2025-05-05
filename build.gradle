@@ -46,6 +46,8 @@ dependencies {
 	implementation 'app.slicequeue:sq-common-base-snowflake-id-entity:0.0.2'
 	implementation 'app.slicequeue:sq-common-base-time-entity:0.0.3'
 	implementation 'app.slicequeue:sq-common-snowflake:0.0.1'
+
+	implementation 'com.vdurmont:emoji-java:5.1.1'
 }
 
 tasks.named('test') {
