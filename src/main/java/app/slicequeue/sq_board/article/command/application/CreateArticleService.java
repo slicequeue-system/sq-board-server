@@ -15,9 +15,8 @@ public class CreateArticleService {
 
     private final ArticleRepository articleRepository;
 
-    public ArticleId createArticle(CreateArticleCommand command) {
+    public Article createArticle(CreateArticleCommand command) {
         Article article = Article.create(command);
-        Article save = articleRepository.save(article);
-        return save.getArticleId();
+        return articleRepository.save(article);
     }
 }

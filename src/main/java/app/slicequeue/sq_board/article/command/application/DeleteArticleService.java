@@ -17,11 +17,10 @@ public class DeleteArticleService {
 
     private final ArticleRepository articleRepository;
 
-    public ArticleId deleteArticle(DeleteArticleCommand command) {
+    public Article deleteArticle(DeleteArticleCommand command) {
         Article article = articleRepository.findByArticleIdAndDeletedAtIsNull(command.articleId())
                 .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없습니다."));
         article.delete();
-        articleRepository.save(article);
-        return article.getArticleId();
+        return articleRepository.save(article);
     }
 }

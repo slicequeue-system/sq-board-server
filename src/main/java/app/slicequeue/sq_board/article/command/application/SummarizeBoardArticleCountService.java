@@ -1,9 +1,10 @@
 package app.slicequeue.sq_board.article.command.application;
 
+import app.slicequeue.sq_board.article.command.domain.Article;
 import app.slicequeue.sq_board.article.command.domain.BoardArticleCount;
 import app.slicequeue.sq_board.article.command.domain.BoardArticleCountRepository;
 import app.slicequeue.sq_board.article.command.domain.dto.BoardArticleCountCommand;
-import app.slicequeue.sq_board.common.callback.LockedCallback;
+import app.slicequeue.sq_board.common.callback.LockedReturnCallback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,20 +16,22 @@ public class SummarizeBoardArticleCountService {
     private final BoardArticleCountRepository boardArticleCountRepository;
 
     @Transactional
-    public void increaseWithLock(BoardArticleCountCommand command, LockedCallback callback) {
+    public void increaseWithLock(LockedReturnCallback<Article> callback) {
+        Article createdArticle = callback.execute();
+        BoardArticleCountCommand command = BoardArticleCountCommand.from(createdArticle);
         BoardArticleCount boardArticleCount = boardArticleCountRepository.findLockedByBoardId(command.boardId())
                 .orElse(BoardArticleCount.createCountZero(command));
         boardArticleCount.increaseCount(command.lastCreatedAt());
         boardArticleCountRepository.save(boardArticleCount);
-        callback.execute();
     }
 
     @Transactional
-    public void decreaseWithLock(BoardArticleCountCommand command, LockedCallback callback) {
+    public void decreaseWithLock(LockedReturnCallback<Article> callback) {
+        Article deletedArticle = callback.execute();
+        BoardArticleCountCommand command = BoardArticleCountCommand.from(deletedArticle);
         BoardArticleCount boardArticleCount = boardArticleCountRepository.findLockedByBoardId(command.boardId())
                 .orElse(BoardArticleCount.createCountZero(command));
         boardArticleCount.decreaseCount();
         boardArticleCountRepository.save(boardArticleCount);
-        callback.execute();
     }
 }

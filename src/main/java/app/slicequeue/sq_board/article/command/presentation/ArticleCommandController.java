@@ -1,10 +1,7 @@
 package app.slicequeue.sq_board.article.command.presentation;
 
 import app.slicequeue.common.dto.CommonResponse;
-import app.slicequeue.sq_board.article.command.application.CreateArticleService;
-import app.slicequeue.sq_board.article.command.application.CreateArticleUseCase;
-import app.slicequeue.sq_board.article.command.application.DeleteArticleService;
-import app.slicequeue.sq_board.article.command.application.UpdateArticleService;
+import app.slicequeue.sq_board.article.command.application.*;
 import app.slicequeue.sq_board.article.command.domain.ArticleId;
 import app.slicequeue.sq_board.article.command.domain.dto.CreateArticleCommand;
 import app.slicequeue.sq_board.article.command.domain.dto.DeleteArticleCommand;
@@ -22,7 +19,7 @@ public class ArticleCommandController {
 
     private final CreateArticleUseCase createArticleUseCase;
     private final UpdateArticleService updateArticleService;
-    private final DeleteArticleService deleteArticleService;
+    private final DeleteArticleUseCase deleteArticleUseCase;
 
     @PostMapping
     public CommonResponse<String> create(@RequestBody @Valid CreateArticleRequest request) {
@@ -40,7 +37,7 @@ public class ArticleCommandController {
     @DeleteMapping("/{articleId}")
     public CommonResponse<String> delete(@PathVariable("articleId") Long articleId) {
         DeleteArticleCommand command = DeleteArticleCommand.from(articleId);
-        return CommonResponse.success("deleted", deleteArticleService.deleteArticle(command).toString());
+        return CommonResponse.success("deleted", deleteArticleUseCase.execute(command).toString());
     }
 
 }
