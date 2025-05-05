@@ -1,6 +1,5 @@
 package app.slicequeue.sq_board.comment_reaction.command.domain;
 
-import app.slicequeue.sq_board.article_reaction.command.domain.dto.ArticleReactionCountCommand;
 import app.slicequeue.sq_board.comment_reaction.command.domain.dto.CommentReactionCountCommand;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -18,14 +17,14 @@ import org.springframework.util.Assert;
 public class CommentReactionCount {
 
     @EmbeddedId
-    private CommentReactionCountId articleReactionCountId;
+    private CommentReactionCountId commentReactionCountId;
     @NotNull
     private int count;
 
     public static CommentReactionCount createCountZero(CommentReactionCountCommand command) {
         Assert.notNull(command, "command must not be null.");
         CommentReactionCount articleReaction = new CommentReactionCount();
-        articleReaction.articleReactionCountId = CommentReactionCountId.from(command);
+        articleReaction.commentReactionCountId = CommentReactionCountId.from(command);
         articleReaction.count = 0;
         return articleReaction;
     }
