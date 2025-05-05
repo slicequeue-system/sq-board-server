@@ -1,4 +1,4 @@
-package app.slicequeue.sq_board.article.command.application;
+package app.slicequeue.sq_board.article.command.application.service;
 
 import app.slicequeue.sq_board.article.command.domain.Article;
 import app.slicequeue.sq_board.article.command.domain.ArticleId;

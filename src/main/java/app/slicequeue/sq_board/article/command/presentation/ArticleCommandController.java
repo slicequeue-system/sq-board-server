@@ -1,7 +1,10 @@
 package app.slicequeue.sq_board.article.command.presentation;
 
 import app.slicequeue.common.dto.CommonResponse;
-import app.slicequeue.sq_board.article.command.application.*;
+import app.slicequeue.sq_board.article.command.application.service.UpdateArticleService;
+import app.slicequeue.sq_board.article.command.application.usecase.CreateArticleUseCase;
+import app.slicequeue.sq_board.article.command.application.usecase.DeleteArticleUseCase;
+import app.slicequeue.sq_board.article.command.application.usecase.UpdateArticleUseCase;
 import app.slicequeue.sq_board.article.command.domain.ArticleId;
 import app.slicequeue.sq_board.article.command.domain.dto.CreateArticleCommand;
 import app.slicequeue.sq_board.article.command.domain.dto.DeleteArticleCommand;
@@ -18,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class ArticleCommandController {
 
     private final CreateArticleUseCase createArticleUseCase;
-    private final UpdateArticleService updateArticleService;
+    private final UpdateArticleUseCase updateArticleUseCase;
     private final DeleteArticleUseCase deleteArticleUseCase;
 
     @PostMapping
@@ -31,7 +34,7 @@ public class ArticleCommandController {
     public CommonResponse<String> update(@PathVariable("articleId") Long articleId,
                                          @RequestBody @Valid UpdateArticleRequest updateArticleRequest) {
         UpdateArticleCommand command = UpdateArticleCommand.from(ArticleId.from(articleId), updateArticleRequest);
-        return CommonResponse.success("updated", updateArticleService.updateArticle(command).toString());
+        return CommonResponse.success("updated", updateArticleUseCase.execute(command).toString());
     }
 
     @DeleteMapping("/{articleId}")

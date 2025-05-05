@@ -1,11 +1,11 @@
-package app.slicequeue.sq_board.article.command.application;
+package app.slicequeue.sq_board.article.command.application.usecase;
 
 import app.slicequeue.common.exception.NotFoundException;
+import app.slicequeue.sq_board.article.command.application.service.CreateArticleService;
+import app.slicequeue.sq_board.article.command.application.service.SummarizeBoardArticleCountService;
 import app.slicequeue.sq_board.article.command.domain.Article;
 import app.slicequeue.sq_board.article.command.domain.ArticleId;
-import app.slicequeue.sq_board.article.command.domain.dto.BoardArticleCountCommand;
 import app.slicequeue.sq_board.article.command.domain.dto.CreateArticleCommand;
-import app.slicequeue.sq_board.article.command.domain.dto.DeleteArticleCommand;
 import app.slicequeue.sq_board.common.util.ConstraintViolationUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,12 +16,12 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor
-public class DeleteArticleUseCase {
+public class CreateArticleUseCase {
 
-    private final DeleteArticleService deleteArticleService;
+    private final CreateArticleService createArticleService;
     private final SummarizeBoardArticleCountService summarizeBoardArticleCountService;
 
-    public ArticleId execute(DeleteArticleCommand command) {
+    public ArticleId execute(CreateArticleCommand command) {
         try {
             return executeWithTransaction(command);
         } catch (DataIntegrityViolationException e) {
@@ -33,14 +33,13 @@ public class DeleteArticleUseCase {
     }
 
     @Transactional
-    public ArticleId executeWithTransaction(DeleteArticleCommand command) {
+    public ArticleId executeWithTransaction(CreateArticleCommand command) {
         AtomicReference<Article> article = new AtomicReference<>();
-        summarizeBoardArticleCountService.decreaseWithLock(
-                () -> {
-                    Article deleted = deleteArticleService.deleteArticle(command);
-                    article.set(deleted);
-                    return deleted;
-                });
+        summarizeBoardArticleCountService.increaseWithLock(() -> {
+            Article created = createArticleService.createArticle(command);
+            article.set(created);
+            return created;
+        });
         return article.get().getArticleId();
     }
 }
