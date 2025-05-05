@@ -1,7 +1,7 @@
 package app.slicequeue.sq_board.article_reaction.command.domain;
 
 import app.slicequeue.sq_board.article.command.domain.ArticleId;
-import app.slicequeue.sq_board.article_reaction.command.domain.dto.CreateArticleReactionCommand;
+import app.slicequeue.sq_board.article_reaction.command.domain.dto.ArticleReactionCommand;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -30,7 +30,7 @@ public class ArticleReaction {
     private Long userId;
     private Instant createdAt;
 
-    public static ArticleReaction create(CreateArticleReactionCommand command) {
+    public static ArticleReaction create(ArticleReactionCommand command) {
         Assert.notNull(command, "command must not be null.");
         ArticleReaction articleReaction = new ArticleReaction();
         articleReaction.articleReactionId = ArticleReactionId.generateId();

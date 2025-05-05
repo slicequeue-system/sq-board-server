@@ -1,7 +1,7 @@
 package app.slicequeue.sq_board.article_reaction.command.domain;
 
 import app.slicequeue.sq_board.article.command.domain.ArticleId;
-import app.slicequeue.sq_board.article_reaction.command.domain.dto.IncreaseArticleReactionCountCommand;
+import app.slicequeue.sq_board.article_reaction.command.domain.dto.ArticleReactionCountCommand;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -26,7 +26,7 @@ public class ArticleReactionCountId implements Serializable {
         this.emoji = emoji;
     }
 
-    public static ArticleReactionCountId from(IncreaseArticleReactionCountCommand command) {
+    public static ArticleReactionCountId from(ArticleReactionCountCommand command) {
         return new ArticleReactionCountId(command.articleId(), command.emoji());
     }
 }

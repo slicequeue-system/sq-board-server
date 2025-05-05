@@ -1,6 +1,6 @@
 package app.slicequeue.sq_board.article_reaction.command.domain;
 
-import app.slicequeue.sq_board.article_reaction.command.domain.dto.IncreaseArticleReactionCountCommand;
+import app.slicequeue.sq_board.article_reaction.command.domain.dto.ArticleReactionCountCommand;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -19,7 +19,7 @@ public class ArticleReactionCount {
     @NotNull
     private int count;
 
-    public static ArticleReactionCount createCountZero(IncreaseArticleReactionCountCommand command) {
+    public static ArticleReactionCount createCountZero(ArticleReactionCountCommand command) {
         Assert.notNull(command, "command must not be null.");
         ArticleReactionCount articleReaction = new ArticleReactionCount();
         articleReaction.articleReactionCountId = ArticleReactionCountId.from(command);
@@ -29,5 +29,10 @@ public class ArticleReactionCount {
 
     public void increaseCount() {
         count = count + 1;
+    }
+
+    public void decreaseCount() {
+        if (count == 0) return;
+        count = count - 1;
     }
 }

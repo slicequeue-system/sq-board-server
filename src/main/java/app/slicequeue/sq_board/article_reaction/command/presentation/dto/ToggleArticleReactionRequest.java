@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class CreateArticleReactionRequest {
+public class ToggleArticleReactionRequest {
 
     @NotNull(message = "게시글 식별값이 누락되었습니다.")
     private Long articleId;
