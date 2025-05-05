@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.util.Assert;
 
 @Getter
-@Table(name = "article_reaction_count", indexes = {
-        @Index(name = "unq_article_id_emoji", columnList = "article_id,emoji", unique = true)
-})
+@Table(name = "article_reaction_count")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ArticleReactionCount {

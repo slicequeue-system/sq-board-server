@@ -19,7 +19,8 @@ public class ArticleReactionCommandController {
     @PostMapping
     public CommonResponse<String> create(CreateArticleReactionRequest request) {
         CreateArticleReactionCommand command = CreateArticleReactionCommand.from(request);
-        return CommonResponse.success(createArticleReactionUseCase.execute(command).toString());
+        createArticleReactionUseCase.execute(command);
+        return CommonResponse.success();
     }
 }
 

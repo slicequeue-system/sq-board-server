@@ -15,10 +15,9 @@ import java.io.Serializable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ArticleReactionCountId implements Serializable {
 
+    @NotNull
     @AttributeOverride(name = "id", column = @Column(name = "article_id"))
-    @Embedded
     private ArticleId articleId; // shard key
-
     @NotNull
     private String emoji;
 

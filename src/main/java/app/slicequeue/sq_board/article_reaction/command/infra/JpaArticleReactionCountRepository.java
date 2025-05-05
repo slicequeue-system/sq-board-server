@@ -11,10 +11,10 @@ import java.util.Optional;
 
 @Repository
 public interface JpaArticleReactionCountRepository extends
-        ArticleReactionCountRepository, JpaRepository<ArticleReactionCount, ArticleId> {
+        ArticleReactionCountRepository, JpaRepository<ArticleReactionCount, ArticleReactionCountId> {
 
     ArticleReactionCount save(ArticleReactionCount articleReactionCount);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    Optional<ArticleReactionCount> findLockedByArticleIdAndEmoji(ArticleId articleId, String emoji);
+    Optional<ArticleReactionCount> findLockedByArticleReactionCountId(ArticleReactionCountId articleReactionCountId);
 }

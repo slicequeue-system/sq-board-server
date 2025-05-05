@@ -16,9 +16,9 @@ public class CreateArticleReactionUseCase {
     private final SummarizeArticleReactionCountService summarizeArticleReactionCountService;
 
     @Transactional
-    public ArticleReactionId execute(CreateArticleReactionCommand command) {
-        ArticleReaction created = createArticleReactionService.create(command);
-        summarizeArticleReactionCountService.increase(IncreaseArticleReactionCountCommand.from(created));
-        return created.getArticleReactionId();
+    public void execute(CreateArticleReactionCommand command) {
+        summarizeArticleReactionCountService.increaseWithLock(
+                IncreaseArticleReactionCountCommand.from(command),
+                (count) -> createArticleReactionService.create(command));
     }
 }

@@ -13,5 +13,5 @@ public interface ArticleReactionCountRepository {
     ArticleReactionCount save(ArticleReactionCount articleReactionCount);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    Optional<ArticleReactionCount> findLockedByArticleIdAndEmoji(ArticleId articleId, String emoji);
+    Optional<ArticleReactionCount> findLockedByArticleReactionCountId(ArticleReactionCountId articleReactionCountId);
 }
