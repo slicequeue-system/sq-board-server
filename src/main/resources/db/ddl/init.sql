@@ -1,5 +1,5 @@
-CREATE SCHEMA `sq-board` DEFAULT CHARACTER SET utf8mb4 collate utf8mb4_general_ci;
-use `sq-board`;
+CREATE SCHEMA sq-board DEFAULT CHARACTER SET utf8mb4 collate utf8mb4_general_ci;
+use sq-board;
 
 CREATE TABLE board (
    board_id bigint NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE article_reaction (
   INDEX fk_ar_article_id_a_article_id_idx (article_id),
   CONSTRAINT fk_ar_article_id_a_article_id
     FOREIGN KEY (article_id)
-    REFERENCES article.article (article_id))
+    REFERENCES article (article_id))
 COMMENT = '글 리엑션';
 
 CREATE TABLE article_reaction (
@@ -82,4 +82,14 @@ CREATE TABLE article_reaction_count (
     REFERENCES article(article_id)
 )
 COMMENT = '게시글 리액션 카운트 집계';
+
+CREATE TABLE board_article_count (
+  board_id BIGINT NOT NULL COMMENT '게시판 식별값',
+  article_count BIGINT NOT NULL COMMENT '게시판 게시글 개수',
+  last_created_at DATETIME NOT NULL COMMENT '마지막 등록 일시',
+  PRIMARY KEY (board_id),
+  CONSTRAINT fk_bac_board_id_b_board_id
+    FOREIGN KEY (board_id)
+    REFERENCES board (board_id))
+COMMENT = '게시판의 게시글 카운트 집계';
 

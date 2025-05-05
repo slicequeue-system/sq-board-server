@@ -1,9 +1,10 @@
 package app.slicequeue.sq_board.article.command.presentation;
 
 import app.slicequeue.common.dto.CommonResponse;
-import app.slicequeue.sq_board.article.command.application.CreateArticleService;
-import app.slicequeue.sq_board.article.command.application.DeleteArticleService;
-import app.slicequeue.sq_board.article.command.application.UpdateArticleService;
+import app.slicequeue.sq_board.article.command.application.service.UpdateArticleService;
+import app.slicequeue.sq_board.article.command.application.usecase.CreateArticleUseCase;
+import app.slicequeue.sq_board.article.command.application.usecase.DeleteArticleUseCase;
+import app.slicequeue.sq_board.article.command.application.usecase.UpdateArticleUseCase;
 import app.slicequeue.sq_board.article.command.domain.ArticleId;
 import app.slicequeue.sq_board.article.command.domain.dto.CreateArticleCommand;
 import app.slicequeue.sq_board.article.command.domain.dto.DeleteArticleCommand;
@@ -19,27 +20,27 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ArticleCommandController {
 
-    private final CreateArticleService createArticleService;
-    private final UpdateArticleService updateArticleService;
-    private final DeleteArticleService deleteArticleService;
+    private final CreateArticleUseCase createArticleUseCase;
+    private final UpdateArticleUseCase updateArticleUseCase;
+    private final DeleteArticleUseCase deleteArticleUseCase;
 
     @PostMapping
     public CommonResponse<String> create(@RequestBody @Valid CreateArticleRequest request) {
         CreateArticleCommand command = CreateArticleCommand.from(request);
-        return CommonResponse.success("created", createArticleService.createArticle(command).toString());
+        return CommonResponse.success("created", createArticleUseCase.execute(command).toString());
     }
 
     @PutMapping("/{articleId}")
     public CommonResponse<String> update(@PathVariable("articleId") Long articleId,
                                          @RequestBody @Valid UpdateArticleRequest updateArticleRequest) {
         UpdateArticleCommand command = UpdateArticleCommand.from(ArticleId.from(articleId), updateArticleRequest);
-        return CommonResponse.success("updated", updateArticleService.updateArticle(command).toString());
+        return CommonResponse.success("updated", updateArticleUseCase.execute(command).toString());
     }
 
     @DeleteMapping("/{articleId}")
     public CommonResponse<String> delete(@PathVariable("articleId") Long articleId) {
         DeleteArticleCommand command = DeleteArticleCommand.from(articleId);
-        return CommonResponse.success("deleted", deleteArticleService.deleteArticle(command).toString());
+        return CommonResponse.success("deleted", deleteArticleUseCase.execute(command).toString());
     }
 
 }

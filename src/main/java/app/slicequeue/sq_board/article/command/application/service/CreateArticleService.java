@@ -1,4 +1,4 @@
-package app.slicequeue.sq_board.article.command.application;
+package app.slicequeue.sq_board.article.command.application.service;
 
 import app.slicequeue.sq_board.article.command.domain.Article;
 import app.slicequeue.sq_board.article.command.domain.ArticleId;
@@ -15,9 +15,8 @@ public class CreateArticleService {
 
     private final ArticleRepository articleRepository;
 
-    public ArticleId createArticle(CreateArticleCommand command) {
+    public Article createArticle(CreateArticleCommand command) {
         Article article = Article.create(command);
-        Article save = articleRepository.save(article);
-        return save.getArticleId();
+        return articleRepository.save(article);
     }
 }
