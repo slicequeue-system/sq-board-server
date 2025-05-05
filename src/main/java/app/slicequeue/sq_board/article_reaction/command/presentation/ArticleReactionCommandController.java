@@ -1,7 +1,7 @@
 package app.slicequeue.sq_board.article_reaction.command.presentation;
 
 import app.slicequeue.common.dto.CommonResponse;
-import app.slicequeue.sq_board.article_reaction.command.application.CreateArticleReactionService;
+import app.slicequeue.sq_board.article_reaction.command.application.CreateArticleReactionUseCase;
 import app.slicequeue.sq_board.article_reaction.command.domain.dto.CreateArticleReactionCommand;
 import app.slicequeue.sq_board.article_reaction.command.presentation.dto.CreateArticleReactionRequest;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ArticleReactionCommandController {
 
-    private final CreateArticleReactionService createArticleReactionService;
+    private final CreateArticleReactionUseCase createArticleReactionUseCase;
 
     @PostMapping
     public CommonResponse<String> create(CreateArticleReactionRequest request) {
         CreateArticleReactionCommand command = CreateArticleReactionCommand.from(request);
-        return CommonResponse.success(createArticleReactionService.create(command).toString());
+        return CommonResponse.success(createArticleReactionUseCase.execute(command).toString());
     }
 }
 

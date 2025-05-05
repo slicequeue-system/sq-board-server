@@ -1,0 +1,33 @@
+package app.slicequeue.sq_board.article_reaction.command.domain;
+
+import app.slicequeue.sq_board.article.command.domain.ArticleId;
+import app.slicequeue.sq_board.article_reaction.command.domain.dto.IncreaseArticleReactionCountCommand;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+
+@Embeddable
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class ArticleReactionCountId implements Serializable {
+
+    @AttributeOverride(name = "id", column = @Column(name = "article_id"))
+    @Embedded
+    private ArticleId articleId; // shard key
+
+    @NotNull
+    private String emoji;
+
+    public ArticleReactionCountId(ArticleId articleId, String emoji) {
+        this.articleId = articleId;
+        this.emoji = emoji;
+    }
+
+    public static ArticleReactionCountId from(IncreaseArticleReactionCountCommand command) {
+        return new ArticleReactionCountId(command.articleId(), command.emoji());
+    }
+}
