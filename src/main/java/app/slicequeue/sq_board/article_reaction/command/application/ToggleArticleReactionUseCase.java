@@ -44,13 +44,13 @@ public class ToggleArticleReactionUseCase {
         if (reactionOptional.isEmpty()) {
             summarizeArticleReactionCountService.increaseWithLock(
                     ArticleReactionCountCommand.from(command),
-                    (count) -> createArticleReactionService.create(command)
+                    () -> createArticleReactionService.create(command)
             );
             return ReactionToggleResult.ADDED;
         } else {
             summarizeArticleReactionCountService.decreaseWithLock(
                     ArticleReactionCountCommand.from(command),
-                    (count) -> deleteArticleReactionService.delete(reactionOptional.get())
+                    () -> deleteArticleReactionService.delete(reactionOptional.get())
             );
             return ReactionToggleResult.REMOVED;
         }
