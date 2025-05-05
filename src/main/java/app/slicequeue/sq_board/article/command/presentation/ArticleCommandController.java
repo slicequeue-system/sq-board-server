@@ -2,6 +2,7 @@ package app.slicequeue.sq_board.article.command.presentation;
 
 import app.slicequeue.common.dto.CommonResponse;
 import app.slicequeue.sq_board.article.command.application.CreateArticleService;
+import app.slicequeue.sq_board.article.command.application.CreateArticleUseCase;
 import app.slicequeue.sq_board.article.command.application.DeleteArticleService;
 import app.slicequeue.sq_board.article.command.application.UpdateArticleService;
 import app.slicequeue.sq_board.article.command.domain.ArticleId;
@@ -19,14 +20,14 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ArticleCommandController {
 
-    private final CreateArticleService createArticleService;
+    private final CreateArticleUseCase createArticleUseCase;
     private final UpdateArticleService updateArticleService;
     private final DeleteArticleService deleteArticleService;
 
     @PostMapping
     public CommonResponse<String> create(@RequestBody @Valid CreateArticleRequest request) {
         CreateArticleCommand command = CreateArticleCommand.from(request);
-        return CommonResponse.success("created", createArticleService.createArticle(command).toString());
+        return CommonResponse.success("created", createArticleUseCase.execute(command).toString());
     }
 
     @PutMapping("/{articleId}")
