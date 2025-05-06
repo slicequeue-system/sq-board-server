@@ -114,3 +114,13 @@ CREATE TABLE comment_reaction_count (
     FOREIGN KEY (comment_id)
     REFERENCES comment (comment_id))
 COMMENT = '댓글 리엑션 카운트 집계 - 사용자 이모지 반응 집계';
+
+CREATE TABLE article_comment_count (
+  article_id BIGINT NOT NULL,
+  comment_count BIGINT NOT NULL COMMENT '게시판 게시글 개수',
+  last_created_at DATETIME NOT NULL COMMENT '마지막 등록 일시',
+  PRIMARY KEY (article_id),
+  CONSTRAINT fk_bcc_article_id_a_article_id
+    FOREIGN KEY (article_id)
+    REFERENCES article (article_id))
+COMMENT = '게시판의 게시글 카운트 집계';
