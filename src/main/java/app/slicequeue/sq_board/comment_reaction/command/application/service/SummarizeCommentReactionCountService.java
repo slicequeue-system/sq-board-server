@@ -30,7 +30,10 @@ public class SummarizeCommentReactionCountService {
     public void decreaseWithLock(CommentReactionCountCommand command, LockedCallback callback) {
         CommentReactionCount reactionCount = getCommentReactionCountOrDefaultCountZero(command);
         reactionCount.decreaseCount();
-        commentReactionCountRepository.save(reactionCount);
+        if (reactionCount.needRemove())
+            commentReactionCountRepository.delete(reactionCount);
+        else
+            commentReactionCountRepository.save(reactionCount);
         callback.execute();
     }
 

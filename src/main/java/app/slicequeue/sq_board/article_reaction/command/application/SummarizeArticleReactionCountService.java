@@ -20,9 +20,7 @@ public class SummarizeArticleReactionCountService {
 
     @Transactional
     public void increaseWithLock(ArticleReactionCountCommand command, LockedCallback callback) {
-        ArticleReactionCount articleReactionCount = articleReactionCountRepository
-                .findLockedByArticleReactionCountId(ArticleReactionCountId.from(command))
-                .orElse(ArticleReactionCount.createCountZero(command));
+        ArticleReactionCount articleReactionCount = getArticleReactionCountOrDefaultCountZero(command);
         articleReactionCount.increaseCount();
         articleReactionCountRepository.save(articleReactionCount);
         callback.execute();
@@ -30,12 +28,19 @@ public class SummarizeArticleReactionCountService {
 
     @Transactional
     public void decreaseWithLock(ArticleReactionCountCommand command, LockedCallback callback) {
-        ArticleReactionCount articleReactionCount = articleReactionCountRepository
+        ArticleReactionCount articleReactionCount = getArticleReactionCountOrDefaultCountZero(command);
+        articleReactionCount.decreaseCount();
+        if (articleReactionCount.needRemove())
+            articleReactionCountRepository.delete(articleReactionCount);
+        else
+            articleReactionCountRepository.save(articleReactionCount);
+        callback.execute();
+    }
+
+    private ArticleReactionCount getArticleReactionCountOrDefaultCountZero(ArticleReactionCountCommand command) {
+        return articleReactionCountRepository
                 .findLockedByArticleReactionCountId(ArticleReactionCountId.from(command))
                 .orElse(ArticleReactionCount.createCountZero(command));
-        articleReactionCount.decreaseCount();
-        articleReactionCountRepository.save(articleReactionCount);
-        callback.execute();
     }
 }
 

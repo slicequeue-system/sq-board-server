@@ -15,6 +15,8 @@ public interface JpaArticleReactionCountRepository extends
 
     ArticleReactionCount save(ArticleReactionCount articleReactionCount);
 
+    void delete(ArticleReactionCount articleReactionCount);
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<ArticleReactionCount> findLockedByArticleReactionCountId(ArticleReactionCountId articleReactionCountId);
 }
