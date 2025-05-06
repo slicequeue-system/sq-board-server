@@ -35,4 +35,8 @@ public class ArticleReactionCount {
         if (count == 0) return;
         count = count - 1;
     }
+
+    public boolean needRemove() {
+        return count == 0;
+    }
 }
