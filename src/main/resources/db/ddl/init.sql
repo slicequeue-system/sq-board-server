@@ -62,7 +62,7 @@ COMMENT = '글 리엑션';
 CREATE TABLE article_reaction (
   article_reaction_id BIGINT NOT NULL COMMENT '게시글 리액션 식별값',
   article_id BIGINT NOT NULL COMMENT '좋아요 대상 글 식별값',
-  emoji VARCHAR(6) NOT NULL COMMENT '사용자 리액션 이모지',
+  emoji VARCHAR(6) NOT NULL COMMENT '사용자 리액션 이모지' character set utf8mb4 COLLATE utf8mb4_bin,
   user_id BIGINT NOT NULL COMMENT '사용자 식별값',
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성일시',
   PRIMARY KEY (article_reaction_id),
@@ -74,7 +74,7 @@ COMMENT = '글 리엑션';
 
 CREATE TABLE article_reaction_count (
   article_id BIGINT NOT NULL COMMENT '게시글 식별값',
-  emoji VARCHAR(6) NOT NULL COMMENT '사용자 리액션 이모지',
+  emoji VARCHAR(6) NOT NULL COMMENT '사용자 리액션 이모지' character set utf8mb4 COLLATE utf8mb4_bin,
   count INT NOT NULL DEFAULT 0 COMMENT '사용자 리액션 이모지 숫자',
   PRIMARY KEY (article_id, emoji),
   CONSTRAINT fk_arc_article_id_a_article_id
@@ -96,7 +96,7 @@ COMMENT = '게시판의 게시글 카운트 집계';
 CREATE TABLE comment_reaction (
   comment_reaction_id BIGINT NOT NULL COMMENT '댓글 리액션 식별값',
   comment_id BIGINT NOT NULL COMMENT '댓글 식별값',
-  emoji VARCHAR(6) NOT NULL COMMENT '사용자 리액션 이모지',
+  emoji VARCHAR(6) NOT NULL COMMENT '사용자 리액션 이모지' character set utf8mb4 COLLATE utf8mb4_bin,
   user_id BIGINT NOT NULL COMMENT '사용자 식별값',
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성일시',
   PRIMARY KEY (comment_reaction_id),
@@ -107,9 +107,8 @@ COMMENT = '댓글 리액션 - 사용자 이모지 반응 수집';
 
 CREATE TABLE comment_reaction_count (
   comment_id BIGINT NOT NULL COMMENT '댓글 식별값',
-  emoji VARCHAR(6) NOT NULL COMMENT '사용자 리액션 이모지',
-  count INT NOT NULL COMMENT '사용자 리액션 이모지 숫자',
-  UNIQUE INDEX unq_article_id_emoji_count (emoji, count) VISIBLE,
+  emoji VARCHAR(6) NOT NULL COMMENT '사용자 리액션 이모지' character set utf8mb4 COLLATE utf8mb4_bin,
+  count INT NOT NULL DEFAULT 0 COMMENT '사용자 리액션 이모지 숫자',
   PRIMARY KEY (comment_id, emoji),
   CONSTRAINT fk_crc_comment_id_c_comment_id
     FOREIGN KEY (comment_id)
