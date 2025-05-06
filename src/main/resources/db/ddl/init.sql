@@ -93,3 +93,25 @@ CREATE TABLE board_article_count (
     REFERENCES board (board_id))
 COMMENT = '게시판의 게시글 카운트 집계';
 
+CREATE TABLE comment_reaction (
+  comment_reaction_id BIGINT NOT NULL COMMENT '댓글 리액션 식별값',
+  comment_id BIGINT NOT NULL COMMENT '댓글 식별값',
+  emoji VARCHAR(6) NOT NULL COMMENT '사용자 리액션 이모지',
+  user_id BIGINT NOT NULL COMMENT '사용자 식별값',
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성일시',
+  PRIMARY KEY (comment_reaction_id),
+  CONSTRAINT fk_cr_comment_id_c_comment_id
+    FOREIGN KEY (comment_id)
+    REFERENCES comment (comment_id))
+COMMENT = '댓글 리액션 - 사용자 이모지 반응 수집';
+
+CREATE TABLE comment_reaction_count (
+  comment_id BIGINT NOT NULL COMMENT '댓글 식별값',
+  emoji VARCHAR(6) NOT NULL COMMENT '사용자 리액션 이모지',
+  count INT NOT NULL COMMENT '사용자 리액션 이모지 숫자',
+  UNIQUE INDEX unq_article_id_emoji_count (emoji, count) VISIBLE,
+  PRIMARY KEY (comment_id, emoji),
+  CONSTRAINT fk_crc_comment_id_c_comment_id
+    FOREIGN KEY (comment_id)
+    REFERENCES comment (comment_id))
+COMMENT = '댓글 리엑션 카운트 집계 - 사용자 이모지 반응 집계';
