@@ -1,4 +1,4 @@
-package app.slicequeue.sq_board.comment.command.application;
+package app.slicequeue.sq_board.comment.command.application.service;
 
 import app.slicequeue.common.exception.NotFoundException;
 import app.slicequeue.sq_board.comment.command.domain.Comment;
@@ -18,10 +18,10 @@ public class UpdateCommentService {
 
     private final CommentRepository commentRepository;
 
-    public CommentId updateComment(UpdateCommentCommand command) {
+    public Comment updateComment(UpdateCommentCommand command) {
         Comment comment = commentRepository.findByCommentId(command.commentId())
                 .orElseThrow(() -> new NotFoundException("댓글을 찾을 수가 없습니다."));
         comment.update(command);
-        return commentRepository.save(comment).getCommentId();
+        return commentRepository.save(comment);
     }
 }

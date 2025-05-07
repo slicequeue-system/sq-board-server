@@ -1,4 +1,4 @@
-package app.slicequeue.sq_board.comment.command.application;
+package app.slicequeue.sq_board.comment.command.application.service;
 
 import app.slicequeue.sq_board.comment.command.domain.Comment;
 import app.slicequeue.sq_board.comment.command.domain.CommentId;
@@ -16,7 +16,7 @@ public class CreateCommentService {
 
     private final CommentRepository commentRepository;
 
-    public CommentId createComment(CreateCommentCommand command) {
+    public Comment createComment(CreateCommentCommand command) {
         Comment parent = findParent(command);
         CommentPath parentCommentPath = parent == null ? CommentPath.create("") : parent.getPath();
 
@@ -28,7 +28,7 @@ public class CreateCommentService {
                                 .map(CommentPath::create)
                                 .orElse(null))
         );
-        return commentRepository.save(comment).getCommentId();
+        return commentRepository.save(comment);
     }
 
     private Comment findParent(CreateCommentCommand command) {
