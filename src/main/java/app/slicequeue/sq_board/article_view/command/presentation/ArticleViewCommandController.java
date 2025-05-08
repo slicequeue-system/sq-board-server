@@ -2,7 +2,7 @@ package app.slicequeue.sq_board.article_view.command.presentation;
 
 import app.slicequeue.common.dto.CommonResponse;
 import app.slicequeue.sq_board.article.command.domain.ArticleId;
-import app.slicequeue.sq_board.article_view.command.application.ArticleViewService;
+import app.slicequeue.sq_board.article_view.command.application.service.ArticleViewService;
 import app.slicequeue.sq_board.article_view.command.application.usecase.IncreaseArticleViewCountUseCase;
 import app.slicequeue.sq_board.article_view.command.domain.dto.IncreaseArticleViewCountCommand;
 import app.slicequeue.sq_board.article_view.command.presentation.dto.IncreaseArticleViewCountRequest;

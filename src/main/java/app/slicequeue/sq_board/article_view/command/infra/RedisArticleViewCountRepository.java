@@ -1,6 +1,7 @@
 package app.slicequeue.sq_board.article_view.command.infra;
 
 import app.slicequeue.sq_board.article.command.domain.ArticleId;
+import app.slicequeue.sq_board.article_view.command.domain.ArticleViewCount;
 import app.slicequeue.sq_board.article_view.command.domain.ArticleViewCountRepository;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +29,10 @@ public class RedisArticleViewCountRepository implements ArticleViewCountReposito
     @Override
     public long increase(@NotNull ArticleId articleId) {
         return redisTemplate.opsForValue().increment(generateKey(articleId.getId()));
+    }
+
+    @Override
+    public void insertIfAbsent(ArticleId articleId, ArticleViewCount count) {
+        redisTemplate.opsForValue().setIfAbsent(generateKey(articleId.getId()), String.valueOf(count.getViewCount()));
     }
 }

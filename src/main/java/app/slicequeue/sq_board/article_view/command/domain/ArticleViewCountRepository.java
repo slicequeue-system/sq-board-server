@@ -8,4 +8,5 @@ public interface ArticleViewCountRepository {
 
     long read(ArticleId articleId);
     long increase(ArticleId articleId);
+    void insertIfAbsent(ArticleId articleId, ArticleViewCount count);
 }

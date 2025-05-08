@@ -1,4 +1,4 @@
-package app.slicequeue.sq_board.article_view.command.application;
+package app.slicequeue.sq_board.article_view.command.application.service;
 
 import app.slicequeue.sq_board.article.command.domain.ArticleId;
 import app.slicequeue.sq_board.article_view.command.domain.ArticleViewCountRepository;

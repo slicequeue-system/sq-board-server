@@ -1,8 +1,8 @@
 package app.slicequeue.sq_board.article_view.command.application.usecase;
 
 import app.slicequeue.common.exception.NotFoundException;
-import app.slicequeue.sq_board.article_view.command.application.ArticleViewService;
-import app.slicequeue.sq_board.article_view.command.application.CheckArticleExistService;
+import app.slicequeue.sq_board.article_view.command.application.service.ArticleViewService;
+import app.slicequeue.sq_board.article_view.command.application.service.CheckArticleExistService;
 import app.slicequeue.sq_board.article_view.command.domain.dto.IncreaseArticleViewCountCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
