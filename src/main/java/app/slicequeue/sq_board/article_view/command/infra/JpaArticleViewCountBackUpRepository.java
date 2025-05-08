@@ -9,9 +9,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface JpaArticleViewCountBackUpRepository extends
         ArticleViewCountBackUpRepository, JpaRepository<ArticleViewCount, ArticleId> {
+
+    ArticleViewCount save(ArticleViewCount init);
 
     @Query("""
             update ArticleViewCount a set a.viewCount = :viewCount
@@ -22,4 +26,6 @@ public interface JpaArticleViewCountBackUpRepository extends
             @Param("articleId") ArticleId articleId,
             @Param("viewCount") long viewCount
     );
+
+    Optional<ArticleViewCount> findById(ArticleId articleId);
 }
