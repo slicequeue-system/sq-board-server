@@ -129,7 +129,7 @@ CREATE TABLE article_view_count (
   article_id BIGINT NOT NULL COMMENT '게시글 식별값',
   view_count BIGINT NOT NULL COMMENT '게시글 조회수 카운트',
   PRIMARY KEY (article_id),
-  CONSTRAINT fk_article_view_count_article1
+  CONSTRAINT fk_av_article_id_a_article_id
     FOREIGN KEY (article_id)
     REFERENCES article (article_id))
 COMMENT = '게시글 조회수 집계';
