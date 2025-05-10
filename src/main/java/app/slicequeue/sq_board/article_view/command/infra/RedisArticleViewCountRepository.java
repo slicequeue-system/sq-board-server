@@ -16,6 +16,7 @@ public class RedisArticleViewCountRepository implements ArticleViewCountReposito
 
     // view::article::{article_id}::view_count
     private static final String KEY_FORMAT = "view::article::%s::view_count";
+
     private String generateKey(long articleId) {
         return KEY_FORMAT.formatted(articleId);
     }
@@ -32,7 +33,9 @@ public class RedisArticleViewCountRepository implements ArticleViewCountReposito
     }
 
     @Override
-    public void insertIfAbsent(ArticleId articleId, ArticleViewCount count) {
-        redisTemplate.opsForValue().setIfAbsent(generateKey(articleId.getId()), String.valueOf(count.getViewCount()));
+    public void insertIfAbsent(@NotNull ArticleViewCount count) {
+        redisTemplate.opsForValue().setIfAbsent(
+                generateKey(count.getArticleId().getId()),
+                String.valueOf(count.getViewCount()));
     }
 }

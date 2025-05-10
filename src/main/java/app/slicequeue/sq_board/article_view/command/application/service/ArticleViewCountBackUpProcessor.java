@@ -31,7 +31,7 @@ public class ArticleViewCountBackUpProcessor {
         List<ArticleViewCount> allCounts = articleViewCountBackUpRepository.findAll();
         try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
             allCounts.forEach(count ->
-                    executor.submit(() -> articleViewCountRepository.insertIfAbsent(count.getArticleId(), count))
+                    executor.submit(() -> articleViewCountRepository.insertIfAbsent(count))
             );
         } // try-with-resources 로 Executor 자동 종료
     }
