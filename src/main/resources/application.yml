@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: sq-board
+    name: sq-board-sever
   datasource:
     url: ${DB_URL:"jdbc:mysql://localhost:3306/sq-board"}
     username: ${DB_USER}
