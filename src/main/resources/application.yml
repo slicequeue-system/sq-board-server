@@ -21,6 +21,13 @@ spring:
       port: ${REDIS_PORT:6379}
       username: ${REDIS_USER}
       password: ${REDIS_PASS}
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: sq-user-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      enable-auto-commit: false
 
 apidoc:
   url: https://apidog.com/apidoc/shared-9e65f46a-1b70-4c95-8fd9-7901303196aa
