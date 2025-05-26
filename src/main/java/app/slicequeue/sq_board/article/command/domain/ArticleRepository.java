@@ -14,6 +14,5 @@ public interface ArticleRepository {
     Optional<Article> findByArticleIdAndDeletedAtIsNull(ArticleId articleId);
 
     @Modifying
-    @Transactional
     int updateUserNicknameByUserId(String nickname, long userId);
 }
