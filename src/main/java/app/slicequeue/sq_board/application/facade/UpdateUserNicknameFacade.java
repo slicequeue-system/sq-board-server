@@ -1,8 +1,8 @@
-package app.slicequeue.sq_board.common.facade;
+package app.slicequeue.sq_board.application.facade;
 
 import app.slicequeue.sq_board.article.command.application.service.UpdateUserNicknameArticleService;
 import app.slicequeue.sq_board.comment.command.application.service.UpdateUserNicknameCommentService;
-import app.slicequeue.sq_board.common.dto.UpdateUserNicknameCommand;
+import app.slicequeue.sq_board.application.dto.UpdateUserNicknameCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

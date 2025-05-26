@@ -2,10 +2,10 @@ package app.slicequeue.sq_board.common.event.handler;
 
 import app.slicequeue.event.domain.Event;
 import app.slicequeue.event.domain.EventHandler;
-import app.slicequeue.sq_board.common.dto.UpdateUserNicknameCommand;
+import app.slicequeue.sq_board.application.dto.UpdateUserNicknameCommand;
 import app.slicequeue.sq_board.common.event.payload.UserInfoChangedEventPayload;
 import app.slicequeue.sq_board.common.event.type.EventType;
-import app.slicequeue.sq_board.common.facade.UpdateUserNicknameFacade;
+import app.slicequeue.sq_board.application.facade.UpdateUserNicknameFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

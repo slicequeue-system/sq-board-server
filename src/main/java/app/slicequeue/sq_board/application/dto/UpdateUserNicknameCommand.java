@@ -1,4 +1,4 @@
-package app.slicequeue.sq_board.common.dto;
+package app.slicequeue.sq_board.application.dto;
 
 import app.slicequeue.sq_board.common.event.payload.UserInfoChangedEventPayload;
 import app.slicequeue.sq_board.common.validation.SelfValidating;

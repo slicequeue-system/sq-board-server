@@ -1,7 +1,7 @@
 package app.slicequeue.sq_board.comment.command.application.service;
 
 import app.slicequeue.sq_board.comment.command.domain.CommentRepository;
-import app.slicequeue.sq_board.common.dto.UpdateUserNicknameCommand;
+import app.slicequeue.sq_board.application.dto.UpdateUserNicknameCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
