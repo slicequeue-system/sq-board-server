@@ -1,6 +1,6 @@
 spring:
   application:
-    name: sq-board-dev
+    name: sq-board-dev-server
 
 apidoc:
   url: https://apidog.com/apidoc/shared/72e5c054-d0c7-4b0b-ae71-d50e06c28abd
